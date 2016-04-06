@@ -3,10 +3,11 @@ how do we create the infinite planes?
 how do we create the objects? if they are openGL objects, is there a way of assigning them texture (coefficients of
 ambient, diffuse, specular reflection, and level of reflectance)?
 
+answer: we can use the openGL objects.
 general algorithm question: how do we know which angle we should examine when we are doing reflection?
 for example:
 
-LIGHT-\
+LIGHT-\1
       --\
         --\
           --\
@@ -15,6 +16,10 @@ eyeport ---> O
 how would we know to trace the ray back to the light source rather than back to the eyeport?
 should a given ray that reflects off a diffuse surface turn into many rays, as suggested by
 slide 10 in lecture15?
+
+This is answered by local illumination. Every point on every object's local illumination is calculated before
+the rays are even traced. Illumination rays are different from reflection rays. Reflection rays are calculated
+via the angle.
 
 
 

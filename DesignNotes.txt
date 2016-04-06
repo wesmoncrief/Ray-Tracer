@@ -1,0 +1,5 @@
+Implementation Plans
+
+1) Create the objects, set up scene
+2) Create local illumination
+3) Create reflection rays & transparent rays
