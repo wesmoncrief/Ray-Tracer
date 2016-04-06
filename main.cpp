@@ -99,10 +99,10 @@ void display(void)
 
 	//assume that X axis goes to the right, Y axis goes up, Z axis comes towards you.
 	//Place the viewpoint at z = 5.
-	int view_distance = 5;
+	int view_distance = 40;
 
 
-	Sphere s1(Point(0,.3,0), .5, .4, .2, .8);
+	Sphere s1(Point(0,0,0), 80, .4, .7, .8);
 	//if I make a Scene class, that can hold the ambient light coefficient.
 	for (int y = 0; y < ImageH; ++y){
 		for (int x = 0; x < ImageW; ++x) {
@@ -114,6 +114,9 @@ void display(void)
 			if (s1.intersect(r, p)){
 				//before calling this we should make sure p is the closest!
 				setFramebuffer(p);
+			}
+			else {
+//				cout << "ha";
 			}
 
 
