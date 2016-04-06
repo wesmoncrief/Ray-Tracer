@@ -10,10 +10,16 @@
 
 class Pixel {
 public:
-    Pixel(const Point &p, float r, float g, float b) : p(p), r(r), g(g), b(b) { }
-    Point p;
+    Pixel();
+
+    Pixel(Point point, float r, float g, float b) : point(point), r(r), g(g), b(b) { }
+    Point point;
     float r, g, b;
 };
+
+Pixel::Pixel() {
+
+}
 
 
 #endif //RAYTRACING_PIXEL_H

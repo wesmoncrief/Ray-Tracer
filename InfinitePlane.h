@@ -23,10 +23,10 @@ public:
     InfinitePlane(double a, double b, double c, double d) : a(a), b(b), c(c), d(d) { }
 
     //returns the first point intersected with
-    Point intersect(int x, int y) {
-
-        return nullptr;
-    }
+//    Point intersect(int x, int y) {
+//
+//        return nullptr;
+//    }
 
 
 };

@@ -5,6 +5,7 @@
 #include <cmath>
 #include <math.h>
 #include "InfinitePlane.h"
+#include "Sphere.h"
 
 /******************************************************************
 	Notes:
@@ -58,6 +59,8 @@ void clearFramebuffer()
 	}
 }
 
+
+
 // Sets pixel x,y to the color RGB
 void setFramebuffer(int x, int y, float R, float G, float B)
 {
@@ -82,6 +85,10 @@ void setFramebuffer(int x, int y, float R, float G, float B)
 		framebuffer[y][x][2] = 1.0;
 }
 
+void setFramebuffer(Pixel pix){
+	setFramebuffer((int) pix.point.x, (int) pix.point.y, pix.r, pix.g, pix.b);
+}
+
 void display(void)
 {
 	//The next two lines of code are for demonstration only.
@@ -94,10 +101,21 @@ void display(void)
 	//Place the viewpoint at z = 5.
 	int view_distance = 5;
 
+
+	Sphere s1(Point(0,.3,0), .5, .4, .2, .8);
 	//if I make a Scene class, that can hold the ambient light coefficient.
 	for (int y = 0; y < ImageH; ++y){
 		for (int x = 0; x < ImageW; ++x) {
 			//if intersection, setframebuffer
+			Ray r(Point(x,y,view_distance));
+			Pixel p = Pixel();
+
+
+			if (s1.intersect(r, p)){
+				//before calling this we should make sure p is the closest!
+				setFramebuffer(p);
+			}
+
 
 
 		}
