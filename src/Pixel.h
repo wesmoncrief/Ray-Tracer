@@ -7,19 +7,20 @@
 
 
 #include "Point.h"
+#include "Color.h"
 
 class Pixel {
 public:
-    Pixel();
 
-    Pixel(Point point, float r, float g, float b) : point(point), r(r), g(g), b(b) { }
+    Pixel() { }
+
+    Pixel(const Point &point, const Color &color) : point(point), color(color) { }
+
     Point point;
-    float r, g, b;
+    Color color;
 };
 
-Pixel::Pixel() {
 
-}
 
 
 #endif //RAYTRACING_PIXEL_H

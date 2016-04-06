@@ -6,6 +6,7 @@
 #include <math.h>
 #include "InfinitePlane.h"
 #include "Sphere.h"
+#include "Color.h"
 
 /******************************************************************
 	Notes:
@@ -33,10 +34,6 @@
 
 float framebuffer[ImageH][ImageW][3];
 
-struct color {
-	float r, g, b;		// Color (R,G,B values)
-};
-
 
 // Draws the scene
 void drawit(void)
@@ -58,7 +55,6 @@ void clearFramebuffer()
 		}
 	}
 }
-
 
 
 // Sets pixel x,y to the color RGB
@@ -85,9 +81,10 @@ void setFramebuffer(int x, int y, float R, float G, float B)
 		framebuffer[y][x][2] = 1.0;
 }
 
-void setFramebuffer(Pixel pix){
-	setFramebuffer((int) pix.point.x, (int) pix.point.y, pix.r, pix.g, pix.b);
+void setFramebuffer(int x, int y, Color color){
+	setFramebuffer(x,y,color.r, color.g, color.b);
 }
+
 
 void display(void)
 {
@@ -98,28 +95,28 @@ void display(void)
 
 
 	//assume that X axis goes to the right, Y axis goes up, Z axis comes towards you.
-	//Place the viewpoint at z = 5.
-	int view_distance = 40;
+	int eye_z = 40;
+	int eye_y = 0;
+	int eye_x = 0;
 
-
-	Sphere s1(Point(0,0,0), 80, .4, .7, .8);
+	Sphere s1(Point(0,0,0), 20, Color(.4, .7, .8));
+	Sphere s2(Point(100,150, -200), 80, Color(.8, .2, .9));
+	Sphere s3(Point(-110,-40, -1000), 120, Color(.8, .2, .9));
 	//if I make a Scene class, that can hold the ambient light coefficient.
-	for (int y = 0; y < ImageH; ++y){
-		for (int x = 0; x < ImageW; ++x) {
+	for (int j = 0; j < ImageH; ++j){
+		for (int i = 0; i < ImageW; ++i) {
+			int y = j - 200 + eye_y;
+			int x = i - 200 + eye_x;
+			//todo: make it to where camera position is adjustable via V changing
 			//if intersection, setframebuffer
-			Ray r(Point(x,y,view_distance));
+			Ray r(Point(x,y,eye_z));
 			Pixel p = Pixel();
-
-
 			if (s1.intersect(r, p)){
 				//before calling this we should make sure p is the closest!
-				setFramebuffer(p);
+				setFramebuffer(i, j, p.color.r, p.color.g, p.color.b);
 			}
-			else {
-//				cout << "ha";
-			}
-
-
+			if (s3.intersect(r,p)) setFramebuffer(i, j, p.color);
+			if (s2.intersect(r, p)) setFramebuffer(i, j, p.color);
 
 		}
 	}

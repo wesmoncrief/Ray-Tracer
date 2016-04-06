@@ -1,3 +1,8 @@
+My sphere appears to be the same size whether it is very near to the screen or very far from it. Is this expected?
+How do we check if there is an object between the object and the light source? Diffuse light and specular light
+don't seem to do this on their own...
+
+
 how do we create the lights? Can we use openGL?
 how do we create the infinite planes?
 how do we create the objects? if they are openGL objects, is there a way of assigning them texture (coefficients of
