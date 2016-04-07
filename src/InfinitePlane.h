@@ -32,5 +32,4 @@ public:
 };
 
 
-
 #endif //RAYTRACING_INFINITEPLANE_H

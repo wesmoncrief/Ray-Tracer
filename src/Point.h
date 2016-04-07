@@ -19,5 +19,4 @@ public:
 };
 
 
-
 #endif //RAYTRACING_POINT_H

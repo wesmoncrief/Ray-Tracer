@@ -21,6 +21,4 @@ public:
 };
 
 
-
-
 #endif //RAYTRACING_PIXEL_H

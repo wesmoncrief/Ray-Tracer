@@ -13,12 +13,12 @@ public:
 
     Color(float r, float g, float b) : r(r), g(g), b(b) { }
 
-    float r,g,b;
+    float r, g, b;
 
     // Add this instance's value to other, and return a new instance
     // with the result.
-    Color sum(Color _color){
-        double new_r, new_g, new_b;
+    Color sum(Color _color) {
+        float new_r, new_g, new_b;
         new_r = _color.r + r;
         new_g = _color.g + g;
         new_b = _color.b + b;
@@ -26,6 +26,7 @@ public:
         if (new_g > 1) new_g = 1;
         if (new_b > 1) new_b = 1;
         Color c(new_r, new_g, new_b);
+        return c;
     }
 };
 

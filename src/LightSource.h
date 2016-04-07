@@ -14,7 +14,6 @@ public:
     Point light_center;
     Color light_color;
 
-
     LightSource() { }
 
     LightSource(const Point &light_center, const Color &light_color) : light_center(light_center),

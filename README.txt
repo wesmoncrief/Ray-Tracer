@@ -1,6 +1,9 @@
 My sphere appears to be the same size whether it is very near to the screen or very far from it. Is this expected?
+
 How do we check if there is an object between the object and the light source? Diffuse light and specular light
 don't seem to do this on their own...
+
+In diffuse light calculation, L13 slide 25, should L and N be unit vectors?
 
 
 how do we create the lights? Can we use openGL?

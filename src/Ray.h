@@ -22,9 +22,9 @@ class Ray : public Vec3 {
 public:
 
 
-    Ray(Point _start){
+    Ray(Point _start) {
         start = _start;
-        V = Vec3(0,0,-1);//this had better be a unit vector
+        V = Vec3(0, 0, -1);//this had better be a unit vector
     }
 
     Vec3 V;

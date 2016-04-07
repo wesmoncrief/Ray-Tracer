@@ -16,8 +16,12 @@ using namespace std;
 class Sphere {
     Point center;
     double radius;
-    Color sphere_color;//color of object
-    double ambient_coefficient = .5;
+    Color sphere_color;
+    //color of object
+    double ambient_coeff = .6;
+    double diffuse_coeff = .6;
+    double specular_refl_coeff = .9;
+    double specular_n_value = 5; //this is the exponent
 
 
 public:
@@ -35,12 +39,11 @@ public:
     bool intersect(Ray ray, Pixel &pixel);
 
     Color calc_ambient();
-    Color calc_diffuse();
+
+    Color calc_diffuse(Point intersect_pt);
+
+    Color calc_specular(Point intersect_pt);
 };
-
-
-
-
 
 
 #endif //RAYTRACING_SPHERE_H
