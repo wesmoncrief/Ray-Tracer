@@ -3,6 +3,7 @@
 //
 
 #include <cmath>
+#include <vector>
 #include "Sphere.h"
 #include "LightSource.h"
 
@@ -31,9 +32,7 @@ bool quadratic(double a, double b, double c, double &t) {
     return true;
 }
 
-
-bool Sphere::intersect(Ray ray,
-                       Pixel &pixel) { //todo should this return a boolean? How to handle cases with no intersection?
+bool Sphere::get_intersect_pt(Ray ray, Point& pt){
     //the math and the naming for this function come from lecture 15 slide 43, Dr. Chai
 
     //p_naught_minus_o is the vector created by (Po (the starting point of the ray) - O (center of sphere)).
@@ -51,73 +50,92 @@ bool Sphere::intersect(Ray ray,
         return false;
     //P = P_o + tV
     Point intersect_pt(ray.start.x + t * ray.V.x, ray.start.y + t * ray.V.y, ray.start.z + t * ray.V.z);
+    pt.x = intersect_pt.x;
+    pt.y = intersect_pt.y;
+    pt.z = intersect_pt.z;
+    return true;
+}
 
 
-    Color co(0, 0, 0); //todo remove this
+bool Sphere::intersect(Ray ray, vector<LightSource> lights, Pixel& pixel) { //todo should this return a boolean? How to handle cases with no intersection?
+
+
+    Point intersect_pt;
+    if (!get_intersect_pt(ray, intersect_pt)) return false; //else the intersect_pt is updated
+
     //color is Direct (ambient + diffuse + specular) + reflected + refracted...
+    //if i add attenuation to plane, should I add it here?
     Color ambient = calc_ambient();
-    Color diffuse = calc_diffuse(intersect_pt);
+    Color diffuse = calc_diffuse(intersect_pt, lights);
     Color direct_color = ambient.sum(diffuse);
-    Color specular = calc_specular(intersect_pt);
+    Color specular = calc_specular(intersect_pt, lights);
     direct_color = direct_color.sum(specular);
     pixel = Pixel(intersect_pt, direct_color);
     return true;
 }
 
-Color Sphere::calc_diffuse(Point intersect_pt) {
+Color Sphere::calc_diffuse(Point intersect_pt, vector<LightSource> lights) {
 
-    LightSource ls(Point(00, 40, 900), Color(.5, .5, .5)); //todo remove this temporary light source, put it into scene
+    Color total_diffuse = Color(0,0,0);
 
-    //I = intensity of point light * diffuse reflection coefficient * (light vector dotted with normal vector)
-    //todo to see if there is occlusion, run intersection on light vector and scene!
+    //run this for each light source. Light sources are additive in their effects.
+    for (int i = 0; i < lights.size(); ++i) {
+        LightSource ls = lights.at(i);
+        //I = intensity of point light * diffuse reflection coefficient * (light vector dotted with normal vector)
+        //todo to see if there is occlusion, run intersection on light vector and scene!
 
-    //should L, N be unit vectors? N should probably be...
-    //N is
-    Vec3 N = Vec3(intersect_pt.x - center.x, intersect_pt.y - center.y, intersect_pt.z - center.z);
-    N.normalize();
+        //should L, N be unit vectors? N should probably be...
+        //N is
+        Vec3 N = Vec3(intersect_pt.x - center.x, intersect_pt.y - center.y, intersect_pt.z - center.z);
+        N.normalize();
 
-    //L is lightsource vector
-    Vec3 L = Vec3(ls.light_center.x - intersect_pt.x, ls.light_center.y - intersect_pt.y,
-                  ls.light_center.z - intersect_pt.z);
-    L.normalize();
-    double LdotN = L.dotProduct(N);
-    double coeff = diffuse_coeff * LdotN;
+        //L is lightsource vector
+        Vec3 L = Vec3(ls.light_center.x - intersect_pt.x, ls.light_center.y - intersect_pt.y,
+                      ls.light_center.z - intersect_pt.z);
+        L.normalize();
+        double LdotN = L.dotProduct(N);
+        double coeff = diffuse_coeff * LdotN;
+        total_diffuse = total_diffuse.sum(ls.light_color.scaled(coeff));
+    }
 
 
-    return Color(coeff * ls.light_color.r, coeff * ls.light_color.b, coeff * ls.light_color.g);
+    return total_diffuse;
 }
 
-Color Sphere::calc_specular(Point intersect_pt) {
+Color Sphere::calc_specular(Point intersect_pt, vector<LightSource> lights) {
     //i'm assuming all the vectors described are normalized
     //I = C * spec_refl_coeff * (R dot E) ^spec_n_value
-    //todo remove the eye point from being hardcoded in, put it in the scene
-
-    Point eye_pt(0, 0, 40);
     Vec3 E(eye_pt.x - intersect_pt.x, eye_pt.y - intersect_pt.y, eye_pt.z - intersect_pt.z);
     E.normalize();
 
-    LightSource ls(Point(00, 40, 900), Color(1, 1, 1)); //todo remove this temporary light source, put it into scene
-    Vec3 L = Vec3(ls.light_center.x - intersect_pt.x, ls.light_center.y - intersect_pt.y,
-                  ls.light_center.z - intersect_pt.z);
-    L.normalize();
+    Color total_specular = Color(0,0,0);
 
-    Vec3 N = Vec3(intersect_pt.x - center.x, intersect_pt.y - center.y, intersect_pt.z - center.z);
-    N.normalize();
+    for (int i = 0; i < lights.size(); ++i) { //lights from different sources are additive
+        LightSource ls = lights.at(i);
+        Vec3 L = Vec3(ls.light_center.x - intersect_pt.x, ls.light_center.y - intersect_pt.y,
+                      ls.light_center.z - intersect_pt.z);
+        L.normalize();
 
-    double n_coef = 2 * L.dotProduct(N);
-    Vec3 R(n_coef * N.x - L.x, n_coef * N.y - L.y, n_coef * N.z - L.z);
+        Vec3 N = Vec3(intersect_pt.x - center.x, intersect_pt.y - center.y, intersect_pt.z - center.z);
+        N.normalize();
 
-    double RdotE = R.dotProduct(E);
-    double powerRdotE = pow(RdotE, specular_n_value);
-    double full_coeff = specular_refl_coeff * powerRdotE;
-    if (full_coeff < 0) full_coeff = 0;
-    Color c(full_coeff * ls.light_color.r, full_coeff * ls.light_color.b, full_coeff * ls.light_color.g);
-    return c;
+        double n_coef = 2 * L.dotProduct(N);
+        Vec3 R(n_coef * N.x - L.x, n_coef * N.y - L.y, n_coef * N.z - L.z);
+
+        double RdotE = R.dotProduct(E);
+        double powerRdotE = pow(RdotE, specular_n_value);
+        double full_coeff = specular_refl_coeff * powerRdotE;
+        if (full_coeff < 0) full_coeff = 0;
+
+        total_specular = total_specular.sum(ls.light_color.scaled(full_coeff));
+    }
+
+    return total_specular;
 }
 
 
 Color Sphere::calc_ambient() {
-    return Color(sphere_color.r * ambient_coeff, sphere_color.g * ambient_coeff, sphere_color.b * ambient_coeff);
+    return Color(sphere_color.scaled(ambient_coeff));
 }
 
 

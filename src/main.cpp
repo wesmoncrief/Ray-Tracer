@@ -92,50 +92,50 @@ void display(void) {
 
 
     //assume that X axis goes to the right, Y axis goes up, Z axis comes towards you.
-    int eye_z = 400;
-    int eye_y = 0;
-    int eye_x = 0;
 
     vector<Sphere> spheres;
     spheres.push_back(Sphere(Point(-100, 0, -200), 20, Color(.4, .7, .8)));
-    spheres.push_back(Sphere(Point(30, 0, 0), 80, Color(1, 0, 0)));
-    spheres.push_back(Sphere(Point(140, -50, 20), 40, Color(.8, .2, .9)));
+    spheres.push_back(Sphere(Point(30, 0, 0), 40, Color(1, 1, 0)));
+    spheres.push_back(Sphere(Point(100, -50, 30), 20, Color(.8, .2, .3)));
+    spheres.push_back(Sphere(Point(140, -50, 0), 50, Color(.8, .2, .9)));
 
     vector<LightSource> lights;
-    lights.push_back(LightSource(Point(00, 40, 900), Color(1, 1, 1)));
+    lights.push_back(LightSource(Point(0, 900, 00), Color(1, 1, 1)));
 
     Scene scene(lights, spheres);
     //if I make a Scene class, that can hold the ambient light coefficient.
+
     for (int j = 0; j < ImageH; ++j) {
         for (int i = 0; i < ImageW; ++i) {
-            int y = j - 200 + eye_y;
-            int x = i - 200 + eye_x;
+            int y = (int) (j - 200 + scene.getEye_pt().y);
+            int x = (int) (i - 200 + scene.getEye_pt().x);
             //todo: make it to where camera position is adjustable via V changing
             //if intersection, setFrameBuffer
-            Ray r(Point(x, y, eye_z));
+            Ray r(Point(x, y, scene.getEye_pt().z));
             Pixel p = Pixel();
             if (scene.intersect(r, p)) {
                 //before calling this we should make sure p is the closest!
-
+                setFramebuffer(i,j, p.color);
 
             }
         }
-
-        drawit();
     }
 
-    void init(void) {
-        clearFramebuffer();
-    }
+    drawit();
+}
 
-    int main(int argc, char **argv) {
-        glutInit(&argc, argv);
-        glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
-        glutInitWindowSize(ImageW, ImageH);
-        glutInitWindowPosition(100, 100);
-        glutCreateWindow("Wesley Moncrief - A5, Option 2");
-        init();
-        glutDisplayFunc(display);
-        glutMainLoop();
-        return 0;
-    }
+void init(void) {
+    clearFramebuffer();
+}
+
+int main(int argc, char **argv) {
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+    glutInitWindowSize(ImageW, ImageH);
+    glutInitWindowPosition(100, 100);
+    glutCreateWindow("Wesley Moncrief - A5, Option 2");
+    init();
+    glutDisplayFunc(display);
+    glutMainLoop();
+    return 0;
+}

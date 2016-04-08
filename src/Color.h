@@ -25,10 +25,20 @@ public:
         if (new_r > 1) new_r = 1;
         if (new_g > 1) new_g = 1;
         if (new_b > 1) new_b = 1;
+        if (new_r < 0) new_r = 0;
+        if (new_g < 0) new_g = 0;
+        if (new_b < 0) new_b = 0;
         Color c(new_r, new_g, new_b);
         return c;
     }
+
+    //this does NOT modify the original color!!
+    Color scaled(double coeff){
+        return Color((float) (coeff * r), (float) (coeff * g), (float) (coeff * b));
+    }
+
 };
+
 
 
 #endif //RAYTRACING_COLOR_H

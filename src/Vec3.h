@@ -5,7 +5,7 @@
 #ifndef RAYTRACING_VEC3_H
 #define RAYTRACING_VEC3_H
 
-
+#include <math.h>
 class Vec3 {
 public:
     double x;
