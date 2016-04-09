@@ -22,7 +22,7 @@ class Sphere {
     //color of object
     double ambient_coeff = .5;
     double diffuse_coeff = .6;
-    double specular_refl_coeff = .9;
+    double specular_refl_coeff = .7;
     double specular_n_value = 50; //this is the exponent
 
     bool get_intersect_pt(Ray ray, Point& pt);
@@ -44,9 +44,13 @@ public:
 
     Color calc_ambient();
 
-    Color calc_diffuse(Point intersect_pt, vector<LightSource> vector1);
+    Color calc_specular(Point intersect_pt, vector<LightSource> lights, vector<Sphere> spheres);
 
-    Color calc_specular(Point intersect_pt, vector<LightSource> vector1);
+    Color calc_diffuse(Point intersect_pt, vector<LightSource> lights, vector<Sphere> spheres);
+
+    bool is_occluded(Ray ray, vector<Sphere> spheres, LightSource light);
+
+    bool equals(Sphere sph);
 };
 
 

@@ -30,11 +30,6 @@ bool Scene::intersect(Ray ray, Pixel &pixel) { //don't modify 'pixel' until the 
 
 }
 
-bool Scene::is_occluded(Pixel pix, LightSource ls) {
-
-
-    return false;
-}
 
 
 

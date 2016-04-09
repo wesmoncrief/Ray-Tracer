@@ -6,6 +6,8 @@
 #define RAYTRACING_POINT_H
 
 
+#include <cmath>
+
 class Point {
 public:
     double x;
@@ -16,6 +18,11 @@ public:
 
     Point(double x, double y, double z) : x(x), y(y), z(z) { }
 
+
+
+    double distance(Point pt) {
+        return sqrt((pt.x - x) * (pt.x - x) + (pt.y - y) * (pt.y - y) + (pt.z - z) * (pt.z - z));
+    }
 };
 
 

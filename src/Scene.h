@@ -13,9 +13,13 @@
 class Scene {
     vector<LightSource> lights; // should this be vector of pointers??
     vector<Sphere> spheres;
-    Point eye_pt = Point(0,0,200);
+    Point eye_pt = Point(-200,0,00);
 public:
 
+
+    void setEye_pt(const Point &eye_pt) {
+        Scene::eye_pt = eye_pt;
+    }
 
     const vector<LightSource> &getLights() const {
         return lights;

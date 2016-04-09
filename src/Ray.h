@@ -26,9 +26,6 @@ public:
         start = _start;
         V = direction;
         V.normalize();
-//        V = Vec3(0, 0, -1);//this had better be a unit vector
-//        V.normalize();
-////        std::cout << V.x << '\t' << V.y << '\t' << V.z << std::endl;
     }
 
     Vec3 V;
