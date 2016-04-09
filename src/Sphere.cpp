@@ -169,11 +169,9 @@ bool Sphere::is_occluded(Ray shadow_ray, vector<Shape *> shapes, LightSource lig
     shadow_ray.normalize();
 
     for (int i = 0; i < shapes.size(); ++i) {
-        Shape* occluding_shape = shapes.at(i);
+        Shape *occluding_shape = shapes.at(i);
         if (occluding_shape->is_occluding(shadow_ray, light))//if our shape gets occluded by occluding_shape
             return true;
-
-
     }
 
     return false;

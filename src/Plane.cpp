@@ -41,11 +41,38 @@ Color Plane::calc_ambient() {
 }
 
 bool Plane::is_occluded(Ray shadow_ray, vector<Shape *> shapes, LightSource light) {
+    //need to move the ray slightly off the shape's surface to avoid self-intersecting
+    shadow_ray.start = Point(shadow_ray.start.x + shadow_ray.V.x, shadow_ray.start.y + shadow_ray.V.y,
+                             shadow_ray.start.z + shadow_ray.V.z);
+    shadow_ray.normalize();
+
+    for (int i = 0; i < shapes.size(); ++i) {
+        Shape* occluding_shape = shapes.at(i);
+        if (occluding_shape->is_occluding(shadow_ray, light))//if our shape gets occluded by occluding_shape
+            return true;
+
+
+    }
+
     return false;
 }
 
 bool Plane::is_occluding(Ray shadow_ray, LightSource light) {
-    return false;
+
+    double distance = light.light_center.distance(shadow_ray.start);
+
+    //t = -(ray.point dot normal + d) / (ray.vec dot N)
+    double PoDotN = Vec3(shadow_ray.start).dotProduct(normal);
+    double numerator = -1 *(PoDotN + d);
+    double denom = shadow_ray.V.dotProduct(normal);
+    double t = numerator / denom;
+    if (t <0 ) return false; // no intersection. https://www.cl.cam.ac.uk/teaching/1999/AGraphHCI/SMAG/node2.html
+
+    if (t < distance)
+        return true;
+    if (t > distance)
+        return false;
+
 }
 
 Color Plane::calc_diffuse(Point intersect_pt, vector<LightSource> lights, vector<Shape *> shapes) {

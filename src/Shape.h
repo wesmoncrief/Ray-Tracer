@@ -22,6 +22,9 @@ public:
 
     virtual bool is_occluding(Ray shadow_ray, LightSource light) = 0;
 
+    //for future idea, a lot of the code for calculating diffuse light and specular light
+    //is independent of the shape. I could pull this out and implement it in Shape
+
 };
 
 
