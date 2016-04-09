@@ -13,9 +13,13 @@
 class Scene {
     vector<LightSource> lights; // should this be vector of pointers??
     vector<Sphere> spheres;
-    Point eye_pt = Point(0,0,40);
+    Point eye_pt = Point(0,0,200);
 public:
 
+
+    const vector<LightSource> &getLights() const {
+        return lights;
+    }
 
     const Point &getEye_pt() const {
         return eye_pt;
@@ -23,7 +27,6 @@ public:
 
     Scene(const vector<LightSource> _lights, const vector<Sphere> _spheres) : lights(_lights), spheres(_spheres) {
         for (int i = 0; i < spheres.size(); ++i) {
-//            eye_pt = Point(0,0,400);
             spheres.at(i).eye_pt.x = eye_pt.x;
             spheres.at(i).eye_pt.y = eye_pt.y;
             spheres.at(i).eye_pt.z = eye_pt.z;

@@ -40,7 +40,7 @@ public:
     //Pixel information can be used if a ray intersects multiple
     //objects. it will help determine which one to draw.
     //boolean is useful for when there is no intersection.
-    bool intersect(Ray ray, vector<LightSource> lights, Pixel &pixel);
+    bool intersect(Ray ray, vector<LightSource> lights, vector<Sphere> spheres, Pixel& pixel1);
 
     Color calc_ambient();
 

@@ -56,9 +56,7 @@ bool Sphere::get_intersect_pt(Ray ray, Point& pt){
     return true;
 }
 
-
-bool Sphere::intersect(Ray ray, vector<LightSource> lights, Pixel& pixel) { //todo should this return a boolean? How to handle cases with no intersection?
-
+bool Sphere::intersect(Ray ray, vector<LightSource> lights, vector<Sphere> spheres, Pixel& pixel) {
 
     Point intersect_pt;
     if (!get_intersect_pt(ray, intersect_pt)) return false; //else the intersect_pt is updated
@@ -133,14 +131,13 @@ Color Sphere::calc_specular(Point intersect_pt, vector<LightSource> lights) {
     return total_specular;
 }
 
-
 Color Sphere::calc_ambient() {
     return Color(sphere_color.scaled(ambient_coeff));
 }
 
-
-
-
+bool is_occluded(Ray r, vector<Sphere> spheres, LightSource light){
+    //'distance' will be the distance between
+}
 
 
 

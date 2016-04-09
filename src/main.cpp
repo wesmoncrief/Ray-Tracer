@@ -109,15 +109,13 @@ void display(void) {
         for (int i = 0; i < ImageW; ++i) {
             int y = (int) (j - 200 + scene.getEye_pt().y);
             int x = (int) (i - 200 + scene.getEye_pt().x);
-            //todo: make it to where camera position is adjustable via V changing
-            //if intersection, setFrameBuffer
-            Ray r(Point(x, y, scene.getEye_pt().z));
+            int z = (int) scene.getEye_pt().z;
+            //make it to where camera position is adjustable via V changing
+            Vec3 direction(0, 0, -1);
+            Ray r(Point(x, y, z), direction);
             Pixel p = Pixel();
-            if (scene.intersect(r, p)) {
-                //before calling this we should make sure p is the closest!
-                setFramebuffer(i,j, p.color);
-
-            }
+            if (scene.intersect(r, p))
+                setFramebuffer(i, j, p.color);
         }
     }
 

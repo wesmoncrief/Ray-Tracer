@@ -13,7 +13,7 @@ bool Scene::intersect(Ray ray, Pixel &pixel) { //don't modify 'pixel' until the 
     vector<Pixel> closest_pixs;
     for (int sph = 0; sph < spheres.size(); ++sph) {
         Pixel temp_pix = pixel;
-        if (spheres.at(sph).intersect(ray, lights, temp_pix)){
+        if (spheres.at(sph).intersect(ray, lights, spheres, temp_pix)){
             closest_pixs.push_back(temp_pix);
         }
         //else this sphere doesn't intersect with the ray
@@ -31,6 +31,8 @@ bool Scene::intersect(Ray ray, Pixel &pixel) { //don't modify 'pixel' until the 
 }
 
 bool Scene::is_occluded(Pixel pix, LightSource ls) {
+
+
     return false;
 }
 
