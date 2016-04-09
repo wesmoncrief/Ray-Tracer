@@ -25,7 +25,7 @@ class Plane : public Shape {
     double ambient_coeff = .4;
     double diffuse_coeff = .5;
     double specular_refl_coeff = .7;
-    double specular_n_value = 50; //this is the exponent
+    double specular_n_value = 5; //this is the exponent
     bool get_intersect_pt(Ray ray, Point &pt);
 
 public:
