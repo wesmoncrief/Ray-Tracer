@@ -24,7 +24,6 @@ class Sphere {
     double diffuse_coeff = .6;
     double specular_refl_coeff = .7;
     double specular_n_value = 50; //this is the exponent
-
     bool get_intersect_pt(Ray ray, Point& pt);
 
 public:
@@ -50,7 +49,6 @@ public:
 
     bool is_occluded(Ray shadow_ray, vector<Sphere> spheres, LightSource light);
 
-    bool equals(Sphere sph);
 };
 
 

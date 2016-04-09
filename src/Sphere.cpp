@@ -7,8 +7,6 @@
 #include "Sphere.h"
 #include "LightSource.h"
 
-bool is_occluded(Ray r, vector<Sphere> spheres, LightSource light);
-
 //when two solutions, this returns the minimum
 bool quadratic(double a, double b, double c, double &t) {
     //should this enforce that t is positive?
@@ -165,11 +163,10 @@ Color Sphere::calc_ambient() {
 
 bool Sphere::is_occluded(Ray shadow_ray, vector<Sphere> spheres, LightSource light) {
 
-    double scale = 1; //need to move the ray slightly off the shape's surface to avoid self-intersecting
+    //need to move the ray slightly off the shape's surface to avoid self-intersecting
     shadow_ray.start = Point(shadow_ray.start.x + shadow_ray.V.x, shadow_ray.start.y + shadow_ray.V.y,
                              shadow_ray.start.z + shadow_ray.V.z);
     shadow_ray.normalize();
-
 
     for (int i = 0; i < spheres.size(); ++i) {
         Sphere occluding_sphere = spheres.at(i);
@@ -200,19 +197,7 @@ bool Sphere::is_occluded(Ray shadow_ray, vector<Sphere> spheres, LightSource lig
 
             }
         }
-        else {
-            int j = 4;
-            j++;
-            j++;
-        }
-
     }
     return false;
 
-
 }
-
-bool Sphere::equals(Sphere sph) {
-    return sph.radius == radius && sph.center.x == center.x && sph.center.y == center.y && sph.center.z == center.z;
-}
-

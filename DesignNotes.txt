@@ -2,7 +2,7 @@ Implementation Plans
 
 1) Create the objects, set up scene
 2) Create local illumination
-3) Create reflection rays & transparent rays
+3) Create reflection rays
 
 
 --- 1) ---
@@ -13,3 +13,8 @@ now i noticed that specular term is showing up on the 'opposite' side that shoul
 - fixed both of these problems by allowing shape to 'occlude' itself, but moving the ray that goes
 from the intersection point on the sphere to the light source one unit away from the object before
 doing occlusion calculation
+
+
+need to add reflection, add planes, add superclass for them both.
+
+http://www.cplusplus.com/doc/tutorial/polymorphism/
