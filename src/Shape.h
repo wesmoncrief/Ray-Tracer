@@ -11,6 +11,12 @@ using namespace std;
 class Shape {
 public:
     Point eye_pt;
+    Color shape_color;
+    double ambient_coeff;
+    double diffuse_coeff;
+    double specular_refl_coeff ;
+    double specular_n_value;
+
 
     virtual bool intersect(Ray ray, vector<LightSource> lights, vector<Shape*> shapes, Pixel& pixel) = 0;
 

@@ -158,7 +158,7 @@ Color Sphere::calc_specular(Point intersect_pt, vector<LightSource> lights, vect
 }
 
 Color Sphere::calc_ambient() {
-    return Color(shape_color.scaled(ambient_coeff));
+    return Color(sphere_color.scaled(ambient_coeff));
 }
 
 bool Sphere::is_occluded(Ray shadow_ray, vector<Shape *> shapes, LightSource light) {

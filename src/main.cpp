@@ -4,11 +4,11 @@
 #include <stdlib.h>
 #include <cmath>
 #include <math.h>
-#include "InfinitePlane.h"
 #include "Sphere.h"
 #include "Color.h"
 #include "Scene.h"
 #include "Shape.h"
+#include "Plane.h"
 
 /******************************************************************
 	Notes:
@@ -97,6 +97,8 @@ void display(void) {
     shapes.push_back(new Sphere(Point(80, 0, 0), 50, Color(.1, .7, .2)));
     shapes.push_back(new Sphere(Point(-20, 0, 80), 50, Color(.4, .7, .8)));
     shapes.push_back(new Sphere(Point(-150, 20, 80), 50, Color(.9, .2, .4)));
+//    shapes.push_back(new Plane(Point(0,0,0), Vec3(-.5,0,1), Color(1,0,0)));
+    shapes.push_back(new Plane(Point(0,-30,0), Vec3(0,1,.1), Color(0,1,0)));
 
 //    shapes.push_back(new Sphere(Point(-100, 0, 20), 50, Color(.4, .7, .8)));
 //    shapes.push_back(new Sphere(Point(100, 0, -200), 100, Color(1, 1, 0)));
@@ -105,7 +107,7 @@ void display(void) {
 
     vector<LightSource> lights;
 
-    lights.push_back(LightSource(Point(-900, 400, 00), Color(1, 1, 1)));
+    lights.push_back(LightSource(Point(-900, 400, 100), Color(1, 1, 1)));
 //    lights.push_back(LightSource(Point(0,-900,-300), Color(1,1,1)));
 
 //    lights.push_back(LightSource(Point(0, 900, 00), Color(1, 1, 1)));

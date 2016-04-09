@@ -19,7 +19,7 @@ using namespace std;
 class Sphere : public Shape {
     Point center;
     double radius;
-    Color shape_color;
+    Color sphere_color;
     //color of object
     double ambient_coeff = .5;
     double diffuse_coeff = .6;
@@ -34,7 +34,7 @@ public:
     //when two solutions, this returns the minimum
 
     Sphere(Point center, double radius, const Color &color)
-            : center(center), radius(radius), shape_color(color) { }
+            : center(center), radius(radius), sphere_color(color) { }
 
     //this returns a boolean and modifies the pixel so that it has color and location information.
     //Pixel information can be used if a ray intersects multiple
