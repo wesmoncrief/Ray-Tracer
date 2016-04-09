@@ -93,36 +93,41 @@ void display(void) {
     //assume that X axis goes to the right, Y axis goes up, Z axis comes towards you.
 
     vector<Sphere> spheres;
-    spheres.push_back(Sphere(Point(0,0,0), 50, Color(.5,.5,.5)));
-//    spheres.push_back(Sphere(Point(-100, 0, 20), 50, Color(.4, .7, .8)));
-//    spheres.push_back(Sphere(Point(100, 0, 0), 100, Color(1, 1, 0)));
-//    spheres.push_back(Sphere(Point(100, -50, 30), 20, Color(.8, .2, .3)));
-//    spheres.push_back(Sphere(Point(0, 200, 0), 70, Color(.8, .2, .9)));
+    spheres.push_back(Sphere(Point(-100, 0, -500), 50, Color(.4, .7, .8)));
+    spheres.push_back(Sphere(Point(50, 0, 0), 50, Color(.4, .7, .8)));
+
+    spheres.push_back(Sphere(Point(-100, 0, 20), 50, Color(.4, .7, .8)));
+    spheres.push_back(Sphere(Point(100, 0, -200), 100, Color(1, 1, 0)));
+    spheres.push_back(Sphere(Point(100, -50, 30), 20, Color(.8, .2, .3)));
+    spheres.push_back(Sphere(Point(0, 200, 0), 70, Color(.8, .2, .9)));
 
     vector<LightSource> lights;
 
-    lights.push_back(LightSource(Point(0,900,300), Color(1,0,0)));
-    lights.push_back(LightSource(Point(0,-900,-300), Color(1,1,1)));
+//    lights.push_back(LightSource(Point(0,900,300), Color(1,0,0)));
+//    lights.push_back(LightSource(Point(0,-900,-300), Color(1,1,1)));
 
-//    lights.push_back(LightSource(Point(0, 900, 00), Color(1, 1, 1)));
-//    lights.push_back(LightSource(Point(-900, 100, 00), Color(0, 1, 1)));
-//    lights.push_back(LightSource(Point(0, 0, 900), Color(1, 0,0)));
+    lights.push_back(LightSource(Point(0, 900, 00), Color(1, 1, 1)));
+    lights.push_back(LightSource(Point(-900, 100, 00), Color(0, 1, 1)));
+    lights.push_back(LightSource(Point(0, 0, 900), Color(1, 0,0)));
 
     Scene scene(lights, spheres);
     //if I make a Scene class, that can hold the ambient light coefficient.
 
-    scene.setEye_pt(Point(00, 0, 400));
+    scene.setEye_pt(Point(0, 0, 150));
 
     for (int j = 0; j < ImageH; ++j) {
         for (int i = 0; i < ImageW; ++i) {
 
             //works for classic view
-            int y = (int) (j - 200 + scene.getEye_pt().y);
-            int x = (int) (i - 200 + scene.getEye_pt().x);
-            int z = (int) scene.getEye_pt().z;
+            double y = (double) (j - 200 + scene.getEye_pt().y);
+            double x = (double) (i - 200 + scene.getEye_pt().x);
+            double z = (double) scene.getEye_pt().z;
             //make it to where camera position is adjustable via V changing
 //            http://stackoverflow.com/questions/13078243/ray-tracing-camera
-            Vec3 direction(0, 0, -1);
+            Vec3 direction(.2*x, .2*y, -z); //these coefficients create a perspective projection.
+            //to make it orthogonal, use Vec3 direction(0,0,-1);
+            //this may
+            direction.normalize();
 
             Ray r(Point(x, y, z), direction);
             Pixel p = Pixel();

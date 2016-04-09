@@ -166,18 +166,20 @@ Color Sphere::calc_ambient() {
 bool Sphere::is_occluded(Ray shadow_ray, vector<Sphere> spheres, LightSource light) {
 
     double scale = 1; //need to move the ray slightly off the shape's surface to avoid self-intersecting
-    shadow_ray.start = Point(shadow_ray.start.x + shadow_ray.V.x, shadow_ray.start.y + shadow_ray.V.y,shadow_ray.start.z + shadow_ray.V.z);
+    shadow_ray.start = Point(shadow_ray.start.x + shadow_ray.V.x, shadow_ray.start.y + shadow_ray.V.y,
+                             shadow_ray.start.z + shadow_ray.V.z);
     shadow_ray.normalize();
 
 
     for (int i = 0; i < spheres.size(); ++i) {
         Sphere occluding_sphere = spheres.at(i);
-        if (true){ //fixes problem where sphere 'occludes' itself
+        if (true) { //fixes problem where sphere 'occludes' itself
             //following code from intersect
 
             double distance = light.light_center.distance(shadow_ray.start);  //distance between lightsource and ray
 
-            Vec3 p_naught_minus_o(shadow_ray.start.x - occluding_sphere.center.x, shadow_ray.start.y - occluding_sphere.center.y,
+            Vec3 p_naught_minus_o(shadow_ray.start.x - occluding_sphere.center.x,
+                                  shadow_ray.start.y - occluding_sphere.center.y,
                                   shadow_ray.start.z - occluding_sphere.center.z);
             double b = 2 * (shadow_ray.V.dotProduct(p_naught_minus_o));
             //http://www.vis.uky.edu/~ryang/teaching/cs535-2012spr/Lectures/13-RayTracing-II.pdf
@@ -185,7 +187,8 @@ bool Sphere::is_occluded(Ray shadow_ray, vector<Sphere> spheres, LightSource lig
             double c =
                     shadow_ray.start.x * shadow_ray.start.x - 2 * shadow_ray.start.x * occluding_sphere.center.x +
                     occluding_sphere.center.x * occluding_sphere.center.x + shadow_ray.start.y * shadow_ray.start.y -
-                    2 * shadow_ray.start.y * occluding_sphere.center.y + occluding_sphere.center.y * occluding_sphere.center.y +
+                    2 * shadow_ray.start.y * occluding_sphere.center.y +
+                    occluding_sphere.center.y * occluding_sphere.center.y +
                     shadow_ray.start.z * shadow_ray.start.z - 2 * shadow_ray.start.z * occluding_sphere.center.z +
                     occluding_sphere.center.z * occluding_sphere.center.z -
                     occluding_sphere.radius * occluding_sphere.radius;
@@ -199,7 +202,7 @@ bool Sphere::is_occluded(Ray shadow_ray, vector<Sphere> spheres, LightSource lig
         }
         else {
             int j = 4;
-            j ++;
+            j++;
             j++;
         }
 
