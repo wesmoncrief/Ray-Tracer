@@ -144,7 +144,7 @@ Color Sphere::calc_specular(Point intersect_pt, vector<LightSource> lights, vect
 
             double n_coef = 2 * L.dotProduct(N);
             Vec3 R(n_coef * N.x - L.x, n_coef * N.y - L.y, n_coef * N.z - L.z);
-            R.normalize();
+            R.normalize(); //not sure if this is necessary or not
 
             double RdotE = R.dotProduct(E);
             double powerRdotE = pow(RdotE, specular_n_value);
@@ -163,25 +163,30 @@ Color Sphere::calc_ambient() {
     return Color(sphere_color.scaled(ambient_coeff));
 }
 
-bool Sphere::is_occluded(Ray ray, vector<Sphere> spheres, LightSource light) {
+bool Sphere::is_occluded(Ray shadow_ray, vector<Sphere> spheres, LightSource light) {
 
-    ray.normalize();
-    double distance = light.light_center.distance(ray.start);  //distance between lightsource and ray
+    double scale = 1; //need to move the ray slightly off the shape's surface to avoid self-intersecting
+    shadow_ray.start = Point(shadow_ray.start.x + shadow_ray.V.x, shadow_ray.start.y + shadow_ray.V.y,shadow_ray.start.z + shadow_ray.V.z);
+    shadow_ray.normalize();
+
 
     for (int i = 0; i < spheres.size(); ++i) {
         Sphere occluding_sphere = spheres.at(i);
-        if (!this->equals(occluding_sphere)){ //fixes problem where sphere 'occludes' itself
+        if (true){ //fixes problem where sphere 'occludes' itself
             //following code from intersect
-            Vec3 p_naught_minus_o(ray.start.x - occluding_sphere.center.x, ray.start.y - occluding_sphere.center.y,
-                                  ray.start.z - occluding_sphere.center.z);
-            double b = 2 * (ray.V.dotProduct(p_naught_minus_o));
+
+            double distance = light.light_center.distance(shadow_ray.start);  //distance between lightsource and ray
+
+            Vec3 p_naught_minus_o(shadow_ray.start.x - occluding_sphere.center.x, shadow_ray.start.y - occluding_sphere.center.y,
+                                  shadow_ray.start.z - occluding_sphere.center.z);
+            double b = 2 * (shadow_ray.V.dotProduct(p_naught_minus_o));
             //http://www.vis.uky.edu/~ryang/teaching/cs535-2012spr/Lectures/13-RayTracing-II.pdf
             //somehow my implementation of the wikipedia way was wrong but this, from above link, worked like a charm.
             double c =
-                    ray.start.x * ray.start.x - 2 * ray.start.x * occluding_sphere.center.x +
-                    occluding_sphere.center.x * occluding_sphere.center.x + ray.start.y * ray.start.y -
-                    2 * ray.start.y * occluding_sphere.center.y + occluding_sphere.center.y * occluding_sphere.center.y +
-                    ray.start.z * ray.start.z - 2 * ray.start.z * occluding_sphere.center.z +
+                    shadow_ray.start.x * shadow_ray.start.x - 2 * shadow_ray.start.x * occluding_sphere.center.x +
+                    occluding_sphere.center.x * occluding_sphere.center.x + shadow_ray.start.y * shadow_ray.start.y -
+                    2 * shadow_ray.start.y * occluding_sphere.center.y + occluding_sphere.center.y * occluding_sphere.center.y +
+                    shadow_ray.start.z * shadow_ray.start.z - 2 * shadow_ray.start.z * occluding_sphere.center.z +
                     occluding_sphere.center.z * occluding_sphere.center.z -
                     occluding_sphere.radius * occluding_sphere.radius;
             //check to make sure unit vector

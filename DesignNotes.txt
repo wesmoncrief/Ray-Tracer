@@ -10,3 +10,6 @@ Implementation Plans
 
 currently the 'pokeball problem'
 now i noticed that specular term is showing up on the 'opposite' side that should have no lighting at all
+- fixed both of these problems by allowing shape to 'occlude' itself, but moving the ray that goes
+from the intersection point on the sphere to the light source one unit away from the object before
+doing occlusion calculation

@@ -48,7 +48,7 @@ public:
 
     Color calc_diffuse(Point intersect_pt, vector<LightSource> lights, vector<Sphere> spheres);
 
-    bool is_occluded(Ray ray, vector<Sphere> spheres, LightSource light);
+    bool is_occluded(Ray shadow_ray, vector<Sphere> spheres, LightSource light);
 
     bool equals(Sphere sph);
 };

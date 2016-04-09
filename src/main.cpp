@@ -101,8 +101,8 @@ void display(void) {
 
     vector<LightSource> lights;
 
-    lights.push_back(LightSource(Point(0,900,-900), Color(1,1,1)));
-//    lights.push_back(LightSource(Point(0,-900,600), Color(1,1,1)));
+    lights.push_back(LightSource(Point(0,900,300), Color(1,0,0)));
+    lights.push_back(LightSource(Point(0,-900,-300), Color(1,1,1)));
 
 //    lights.push_back(LightSource(Point(0, 900, 00), Color(1, 1, 1)));
 //    lights.push_back(LightSource(Point(-900, 100, 00), Color(0, 1, 1)));
