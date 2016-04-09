@@ -122,6 +122,7 @@ Color Sphere::calc_diffuse(Point intersect_pt, vector<LightSource> lights, vecto
 Color Sphere::calc_specular(Point intersect_pt, vector<LightSource> lights, vector<Sphere> spheres) {
     //i'm assuming all the vectors described are normalized
     //I = C * spec_refl_coeff * (R dot E) ^spec_n_value
+
     Vec3 E(eye_pt.x - intersect_pt.x, eye_pt.y - intersect_pt.y, eye_pt.z - intersect_pt.z);
     E.normalize();
 
@@ -143,6 +144,7 @@ Color Sphere::calc_specular(Point intersect_pt, vector<LightSource> lights, vect
 
             double n_coef = 2 * L.dotProduct(N);
             Vec3 R(n_coef * N.x - L.x, n_coef * N.y - L.y, n_coef * N.z - L.z);
+            R.normalize();
 
             double RdotE = R.dotProduct(E);
             double powerRdotE = pow(RdotE, specular_n_value);
@@ -163,17 +165,10 @@ Color Sphere::calc_ambient() {
 
 bool Sphere::is_occluded(Ray ray, vector<Sphere> spheres, LightSource light) {
 
-    int dumb = 0;
     ray.normalize();
     double distance = light.light_center.distance(ray.start);  //distance between lightsource and ray
 
     for (int i = 0; i < spheres.size(); ++i) {
-        if (i == 0 && radius == 20){
-            int j = 4;
-            dumb += j;
-
-        }
-//      todo it jacks up when it 'intersects' with itself..
         Sphere occluding_sphere = spheres.at(i);
         if (!this->equals(occluding_sphere)){ //fixes problem where sphere 'occludes' itself
             //following code from intersect
@@ -197,7 +192,11 @@ bool Sphere::is_occluded(Ray ray, vector<Sphere> spheres, LightSource light) {
 
             }
         }
-
+        else {
+            int j = 4;
+            j ++;
+            j++;
+        }
 
     }
     return false;

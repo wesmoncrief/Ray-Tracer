@@ -90,19 +90,23 @@ void display(void) {
     for (int i = 0; i <= 100; i++) setFramebuffer(i, 3 * i, 1.0, 1.0, 1.0);
     drawit();
 
-
     //assume that X axis goes to the right, Y axis goes up, Z axis comes towards you.
 
     vector<Sphere> spheres;
-    spheres.push_back(Sphere(Point(-100, 0, 20), 50, Color(.4, .7, .8)));
-    spheres.push_back(Sphere(Point(100, 0, 0), 100, Color(1, 1, 0)));
-    spheres.push_back(Sphere(Point(100, -50, 30), 20, Color(.8, .2, .3)));
-    spheres.push_back(Sphere(Point(0, 200, 0), 70, Color(.8, .2, .9)));
+    spheres.push_back(Sphere(Point(0,0,0), 50, Color(.5,.5,.5)));
+//    spheres.push_back(Sphere(Point(-100, 0, 20), 50, Color(.4, .7, .8)));
+//    spheres.push_back(Sphere(Point(100, 0, 0), 100, Color(1, 1, 0)));
+//    spheres.push_back(Sphere(Point(100, -50, 30), 20, Color(.8, .2, .3)));
+//    spheres.push_back(Sphere(Point(0, 200, 0), 70, Color(.8, .2, .9)));
 
     vector<LightSource> lights;
-    lights.push_back(LightSource(Point(0, 900, 00), Color(1, 1, 1)));
-    lights.push_back(LightSource(Point(-900, 100, 00), Color(1, 1, 1)));
-    lights.push_back(LightSource(Point(0, 0, 900), Color(1, 0,0)));
+
+    lights.push_back(LightSource(Point(0,900,-900), Color(1,1,1)));
+//    lights.push_back(LightSource(Point(0,-900,600), Color(1,1,1)));
+
+//    lights.push_back(LightSource(Point(0, 900, 00), Color(1, 1, 1)));
+//    lights.push_back(LightSource(Point(-900, 100, 00), Color(0, 1, 1)));
+//    lights.push_back(LightSource(Point(0, 0, 900), Color(1, 0,0)));
 
     Scene scene(lights, spheres);
     //if I make a Scene class, that can hold the ambient light coefficient.

@@ -6,3 +6,7 @@ Implementation Plans
 
 
 --- 1) ---
+
+
+currently the 'pokeball problem'
+now i noticed that specular term is showing up on the 'opposite' side that should have no lighting at all

@@ -27,7 +27,6 @@ bool Scene::intersect(Ray ray, Pixel &pixel) { //don't modify 'pixel' until the 
     pixel = closest_pix;
     return true;
 
-
 }
 
 
