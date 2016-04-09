@@ -67,7 +67,7 @@ bool Sphere::get_intersect_pt(Ray ray, Point &pt) {
     return true;
 }
 
-bool Sphere::intersect(Ray ray, vector<LightSource> lights, vector<Sphere> spheres, Pixel &pixel) {
+bool Sphere::intersect(Ray ray, vector<LightSource> lights, vector<Shape *> shapes, Pixel &pixel) {
 
     Point intersect_pt;
     if (!get_intersect_pt(ray, intersect_pt)) return false; //else the intersect_pt is updated
@@ -75,15 +75,15 @@ bool Sphere::intersect(Ray ray, vector<LightSource> lights, vector<Sphere> spher
     //color is Direct (ambient + diffuse + specular) + reflected + //refracted...
     //if i add attenuation to plane, should I add it here?
     Color ambient = calc_ambient();
-    Color diffuse = calc_diffuse(intersect_pt, lights, spheres);
+    Color diffuse = calc_diffuse(intersect_pt, lights, shapes);
     Color direct_color = ambient.sum(diffuse);
-    Color specular = calc_specular(intersect_pt, lights, spheres);
+    Color specular = calc_specular(intersect_pt, lights, shapes);
     direct_color = direct_color.sum(specular);
     pixel = Pixel(intersect_pt, direct_color);
     return true;
 }
 
-Color Sphere::calc_diffuse(Point intersect_pt, vector<LightSource> lights, vector<Sphere> spheres) {
+Color Sphere::calc_diffuse(Point intersect_pt, vector<LightSource> lights, vector<Shape *> shapes) {
 
     Color total_diffuse = Color(0, 0, 0);
 
@@ -94,7 +94,7 @@ Color Sphere::calc_diffuse(Point intersect_pt, vector<LightSource> lights, vecto
         Vec3 occlu_vec(ls.light_center.x - intersect_pt.x, ls.light_center.y - intersect_pt.y,
                        ls.light_center.z - intersect_pt.z);
 
-        if (!is_occluded(Ray(intersect_pt, occlu_vec), spheres, ls)) {
+        if (!is_occluded(Ray(intersect_pt, occlu_vec), shapes, ls)) {
             //I = intensity of point light * diffuse reflection coefficient * (light vector dotted with normal vector)
 
             //should L, N be unit vectors? N should probably be...
@@ -117,7 +117,7 @@ Color Sphere::calc_diffuse(Point intersect_pt, vector<LightSource> lights, vecto
     return total_diffuse;
 }
 
-Color Sphere::calc_specular(Point intersect_pt, vector<LightSource> lights, vector<Sphere> spheres) {
+Color Sphere::calc_specular(Point intersect_pt, vector<LightSource> lights, vector<Shape*> shapes) {
     //i'm assuming all the vectors described are normalized
     //I = C * spec_refl_coeff * (R dot E) ^spec_n_value
 
@@ -132,7 +132,7 @@ Color Sphere::calc_specular(Point intersect_pt, vector<LightSource> lights, vect
         Vec3 occlu_vec(ls.light_center.x - intersect_pt.x, ls.light_center.y - intersect_pt.y,
                        ls.light_center.z - intersect_pt.z);
 
-        if (!is_occluded(Ray(intersect_pt, occlu_vec), spheres, ls)) {
+        if (!is_occluded(Ray(intersect_pt, occlu_vec), shapes, ls)) {
             Vec3 L = Vec3(ls.light_center.x - intersect_pt.x, ls.light_center.y - intersect_pt.y,
                           ls.light_center.z - intersect_pt.z);
             L.normalize();
@@ -158,45 +158,53 @@ Color Sphere::calc_specular(Point intersect_pt, vector<LightSource> lights, vect
 }
 
 Color Sphere::calc_ambient() {
-    return Color(sphere_color.scaled(ambient_coeff));
+    return Color(shape_color.scaled(ambient_coeff));
 }
 
-bool Sphere::is_occluded(Ray shadow_ray, vector<Sphere> spheres, LightSource light) {
+bool Sphere::is_occluded(Ray shadow_ray, vector<Shape *> shapes, LightSource light) {
 
     //need to move the ray slightly off the shape's surface to avoid self-intersecting
     shadow_ray.start = Point(shadow_ray.start.x + shadow_ray.V.x, shadow_ray.start.y + shadow_ray.V.y,
                              shadow_ray.start.z + shadow_ray.V.z);
     shadow_ray.normalize();
 
-    for (int i = 0; i < spheres.size(); ++i) {
-        Sphere occluding_sphere = spheres.at(i);
-        if (true) { //fixes problem where sphere 'occludes' itself
-            //following code from intersect
+    for (int i = 0; i < shapes.size(); ++i) {
+        Shape* occluding_shape = shapes.at(i);
+        if (occluding_shape->is_occluding(shadow_ray, light))//if our shape gets occluded by occluding_shape
+            return true;
 
-            double distance = light.light_center.distance(shadow_ray.start);  //distance between lightsource and ray
 
-            Vec3 p_naught_minus_o(shadow_ray.start.x - occluding_sphere.center.x,
-                                  shadow_ray.start.y - occluding_sphere.center.y,
-                                  shadow_ray.start.z - occluding_sphere.center.z);
-            double b = 2 * (shadow_ray.V.dotProduct(p_naught_minus_o));
-            //http://www.vis.uky.edu/~ryang/teaching/cs535-2012spr/Lectures/13-RayTracing-II.pdf
-            //somehow my implementation of the wikipedia way was wrong but this, from above link, worked like a charm.
-            double c =
-                    shadow_ray.start.x * shadow_ray.start.x - 2 * shadow_ray.start.x * occluding_sphere.center.x +
-                    occluding_sphere.center.x * occluding_sphere.center.x + shadow_ray.start.y * shadow_ray.start.y -
-                    2 * shadow_ray.start.y * occluding_sphere.center.y +
-                    occluding_sphere.center.y * occluding_sphere.center.y +
-                    shadow_ray.start.z * shadow_ray.start.z - 2 * shadow_ray.start.z * occluding_sphere.center.z +
-                    occluding_sphere.center.z * occluding_sphere.center.z -
-                    occluding_sphere.radius * occluding_sphere.radius;
-            //check to make sure unit vector
-            double t = 0;
-            if (quadratic(1.0, b, c, t)) { //there is an intersection
-                if (t < distance)
-                    return true;
+    }
 
-            }
-        }
+    return false;
+
+}
+
+bool Sphere::is_occluding(Ray shadow_ray, LightSource light){
+
+    //following code from intersect
+    double distance = light.light_center.distance(shadow_ray.start);  //distance between lightsource and ray
+
+    Vec3 p_naught_minus_o(shadow_ray.start.x - center.x,
+                          shadow_ray.start.y - center.y,
+                          shadow_ray.start.z - center.z);
+    double b = 2 * (shadow_ray.V.dotProduct(p_naught_minus_o));
+    //http://www.vis.uky.edu/~ryang/teaching/cs535-2012spr/Lectures/13-RayTracing-II.pdf
+    //somehow my implementation of the wikipedia way was wrong but this, from above link, worked like a charm.
+    double c =
+            shadow_ray.start.x * shadow_ray.start.x - 2 * shadow_ray.start.x * center.x +
+            center.x * center.x + shadow_ray.start.y * shadow_ray.start.y -
+            2 * shadow_ray.start.y * center.y +
+            center.y * center.y +
+            shadow_ray.start.z * shadow_ray.start.z - 2 * shadow_ray.start.z * center.z +
+            center.z * center.z -
+            radius * radius;
+    //check to make sure unit vector
+    double t = 0;
+    if (quadratic(1.0, b, c, t)) { //there is an intersection
+        if (t < distance)
+            return true;
+
     }
     return false;
 

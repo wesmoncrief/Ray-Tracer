@@ -11,15 +11,15 @@ bool cmp_pts(Pixel p1, Pixel p2){
 bool Scene::intersect(Ray ray, Pixel &pixel) { //don't modify 'pixel' until the end, it's basically a return value
 
     vector<Pixel> closest_pixs;
-    for (int sph = 0; sph < spheres.size(); ++sph) {
+    for (int i = 0; i < shapes.size(); ++i) {
         Pixel temp_pix = pixel;
-        if (spheres.at(sph).intersect(ray, lights, spheres, temp_pix)){
+        if (shapes.at(i)->intersect(ray, lights, shapes, temp_pix)){ //add all the intersections from
+            //the different shapes to the closest_pix vector
             closest_pixs.push_back(temp_pix);
         }
         //else this sphere doesn't intersect with the ray
     }
 
-    //todo add intersections for planes here
 
     if (closest_pixs.size() == 0 ) return false; //no intersections with shapes
 

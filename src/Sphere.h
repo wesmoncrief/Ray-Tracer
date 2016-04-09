@@ -12,13 +12,14 @@
 #include "Ray.h"
 #include "Color.h"
 #include "LightSource.h"
+#include "Shape.h"
 
 using namespace std;
 
-class Sphere {
+class Sphere : public Shape {
     Point center;
     double radius;
-    Color sphere_color;
+    Color shape_color;
     //color of object
     double ambient_coeff = .5;
     double diffuse_coeff = .6;
@@ -33,22 +34,23 @@ public:
     //when two solutions, this returns the minimum
 
     Sphere(Point center, double radius, const Color &color)
-            : center(center), radius(radius), sphere_color(color) { }
+            : center(center), radius(radius), shape_color(color) { }
 
     //this returns a boolean and modifies the pixel so that it has color and location information.
     //Pixel information can be used if a ray intersects multiple
     //objects. it will help determine which one to draw.
     //boolean is useful for when there is no intersection.
-    bool intersect(Ray ray, vector<LightSource> lights, vector<Sphere> spheres, Pixel& pixel1);
+    bool intersect(Ray ray, vector<LightSource> lights, vector<Shape*> shapes, Pixel& pixel);
 
     Color calc_ambient();
 
-    Color calc_specular(Point intersect_pt, vector<LightSource> lights, vector<Sphere> spheres);
+    bool is_occluding(Ray shadow_ray, LightSource light);
 
-    Color calc_diffuse(Point intersect_pt, vector<LightSource> lights, vector<Sphere> spheres);
+    bool is_occluded(Ray shadow_ray, vector<Shape *> shapes, LightSource light);
 
-    bool is_occluded(Ray shadow_ray, vector<Sphere> spheres, LightSource light);
+    Color calc_diffuse(Point intersect_pt, vector<LightSource> lights, vector<Shape *> shapes);
 
+    Color calc_specular(Point intersect_pt, vector<LightSource> lights, vector<Shape *> shapes);
 };
 
 

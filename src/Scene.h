@@ -10,10 +10,14 @@
 #include "LightSource.h"
 #include "Sphere.h"
 
+using namespace std;
+
 class Scene {
     vector<LightSource> lights; // should this be vector of pointers??
     vector<Sphere> spheres;
     Point eye_pt = Point(-200,0,00);
+
+    vector<Shape*> shapes;
 public:
 
 
@@ -29,20 +33,20 @@ public:
         return eye_pt;
     }
 
-    Scene(const vector<LightSource> _lights, const vector<Sphere> _spheres) : lights(_lights), spheres(_spheres) {
-        for (int i = 0; i < spheres.size(); ++i) {
-            spheres.at(i).eye_pt.x = eye_pt.x;
-            spheres.at(i).eye_pt.y = eye_pt.y;
-            spheres.at(i).eye_pt.z = eye_pt.z;
+    Scene(vector<LightSource> _lights, vector<Shape*> _shapes) : lights(_lights), shapes(_shapes) {
+        cout << "here " << endl;
+        for (int i = 0; i < shapes.size(); ++i) {
+            shapes.at(i)->eye_pt.x = eye_pt.x;
+            shapes.at(i)->eye_pt.y = eye_pt.y;
+            shapes.at(i)->eye_pt.z = eye_pt.z;
+            cout << "i = " << i << endl;
 
         }
-        //todo add eye_pt data for rectangle
     }
 
     Scene() { }
 
     bool intersect(Ray ray, Pixel &pixel);
-    bool is_occluded(Pixel pix, LightSource ls);
 };
 
 
