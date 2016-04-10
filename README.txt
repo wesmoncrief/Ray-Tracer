@@ -1,33 +1,9 @@
-My sphere appears to be the same size whether it is very near to the screen or very far from it. Is this expected?
-
-How do we check if there is an object between the object and the light source? Diffuse light and specular light
-don't seem to do this on their own...
-
-In diffuse light calculation, L13 slide 25, should L and N be unit vectors?
-
-
-how do we create the lights? Can we use openGL?
-how do we create the infinite planes?
-how do we create the objects? if they are openGL objects, is there a way of assigning them texture (coefficients of
-ambient, diffuse, specular reflection, and level of reflectance)?
-
-answer: we can use the openGL objects.
-general algorithm question: how do we know which angle we should examine when we are doing reflection?
-for example:
-
-LIGHT-\1
-      --\
-        --\
-          --\
-eyeport ---> O
-
-how would we know to trace the ray back to the light source rather than back to the eyeport?
-should a given ray that reflects off a diffuse surface turn into many rays, as suggested by
-slide 10 in lecture15?
-
-This is answered by local illumination. Every point on every object's local illumination is calculated before
-the rays are even traced. Illumination rays are different from reflection rays. Reflection rays are calculated
-via the angle.
+In my ray tracer, I have implemented all of the requirements. The first scene that is displayed should show all of the
+required characteristics. It has a red light coming from the back of the display, and a white light from the left
+middle (as evidenced by the more prominent shadows). It contains two planes and four spheres. There is one sphere with
+a high level of reflectivity, and the others don't reflect. They all have different colors and coefficients ambient,
+diffuse, and specular reflection.
+Because some of the properties may not be very clear, I added several more images to look at.
 
 
 

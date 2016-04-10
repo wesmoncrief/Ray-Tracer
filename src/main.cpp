@@ -29,6 +29,8 @@
 #define ImageH 600
 
 float framebuffer[ImageH][ImageW][3];
+int image_num; //used to cycle between images!
+int num_of_images;
 
 
 // Draws the scene
@@ -80,70 +82,111 @@ void setFramebuffer(int x, int y, Color color) {
 
 
 void display(void) {
-    //The next two lines of code are for demonstration only.
-    //They show how to draw a line from (0,0) to (100,100)
-    for (int i = 0; i <= 100; i++) setFramebuffer(i, 3 * i, 1.0, 1.0, 1.0);
-    drawit();
 
     //assume that X axis goes to the right, Y axis goes up, Z axis comes towards you.
-
     vector<Shape *> shapes;
-//    shapes.push_back(new Sphere(Point(80, 0, 0), 50, Color(.1, .7, .2)));
-//    shapes.push_back(new Sphere(Point(-20, 0, 80), 50, Color(.4, .7, .8)));
-//    shapes.push_back(new Sphere(Point(-150, -100, -80), 50, Color(.9, .2, .4)));
-//    shapes.push_back(new Plane(Point(0,0,0), Vec3(-.5,0,1), Color(1,0,0)));
-    shapes.push_back(new Plane(Point(0,-200,0), Vec3(0,1,.05), Color(0,1,0), 0));
-    shapes.push_back(new Plane(Point(300,0,-600), Vec3(-1,0,.01), Color(1,.7,0), 0, .45, .5, .3, 30));
-
-    shapes.push_back(new Sphere(Point(-150, -115, -200), 80, Color(.5, .5, 1), 0, .4, .7, .2, 5 ));
-    shapes.push_back(new Sphere(Point(0, -135, -350), 50, Color(.4, .7, .8), 0));
-    shapes.push_back(new Sphere(Point(0, 50, -750), 200, Color(.82, .68, .21), .4, .6, .3, .5, 3));
-    shapes.push_back(new Sphere(Point(-300, 200, -450), 60, Color(0, .2, 0), 0, .6, .8, .4, 40));
-//    shapes.push_back(new Sphere(Point(0, 200, 0), 70, Color(.8, .2, .9)));
-
     vector<LightSource> lights;
 
-    lights.push_back(LightSource(Point(-900, 400, 100), Color(1, 1, 1)));
-    lights.push_back(LightSource(Point(-100, 400, -2000), Color(.1, 1, .1)));
-//    lights.push_back(LightSource(Point(30,-200,400), Color(0,0,)));
-//    lights.push_back(LightSource(Point(-400, 500, 200), Color(0,0,1)));
+    Scene scene;
+    if (image_num == 0){
+        shapes.push_back(new Plane(Point(0, -200, 0), Vec3(0, 1, .05), Color(0, 1, 0), 0));
+        shapes.push_back(new Plane(Point(300, 0, -600), Vec3(-1, 0, .01), Color(1, .1, 0), 0, .45, .5, .3, 30));
 
-//    lights.push_back(LightSource(Point(0, 900, 00), Color(1, 1, 1)));
-//    lights.push_back(LightSource(Point(-900, 100, 00), Color(0, 1, 1)));
-//    lights.push_back(LightSource(Point(0, 0, 900), Color(1, 0,0)
+        shapes.push_back(new Sphere(Point(-150, -115, -200), 80, Color(.5, .5, 1), 0, .4, .7, .2, 5));
+        shapes.push_back(new Sphere(Point(0, -135, -350), 50, Color(.4, .7, .8), 0));
+        shapes.push_back(new Sphere(Point(0, 50, -750), 200, Color(.82, .68, .21), .4, .6, .3, .5, 3));
+        shapes.push_back(new Sphere(Point(-300, 200, -450), 60, Color(0, .4, 0), 0, .6, .8, .4, 40));
 
-    Scene scene(lights, shapes);
+        lights.push_back(LightSource(Point(-900, 400, 100), Color(1, 1, 1)));
+        lights.push_back(LightSource(Point(-100, 400, -2000), Color(1, 1, .1)));
+        lights.push_back(LightSource(Point(100, -200, 1000), Color(0, 0, .5)));
+
+        scene = Scene(lights, shapes);
+        scene.setEye_pt(Point(0, 0, 1300));
+    }
+    if (image_num == 1){
+        shapes.push_back(new Sphere(Point(-100, 0, 20), 50, Color(.4, .7, .8)));
+        shapes.push_back(new Sphere(Point(100, 0, 0), 100, Color(1, 1, 0)));
+        shapes.push_back(new Sphere(Point(100, -50, 30), 20, Color(.8, .2, .3)));
+        shapes.push_back(new Sphere(Point(0, 200, 0), 70, Color(.8, .2, .9)));
+
+        lights.push_back(LightSource(Point(0, 900, 00), Color(0, 1, 0)));
+        lights.push_back(LightSource(Point(-900, 100, 200), Color(0, 0, 1)));
+
+        scene = Scene(lights, shapes);
+        scene.setEye_pt(Point(0, 0, 1300));
+    }
+    if (image_num == 2){
+        shapes.push_back(new Sphere(Point(0, 100, 0), 250, Color(.3, .8, .3)));
+
+        lights.push_back(LightSource(Point(0, 900, 400), Color(0, 1, 0)));
+        lights.push_back(LightSource(Point(-900, 0, 400), Color(0, 0, 1)));
+        lights.push_back(LightSource(Point(900, 0, 400), Color(1, 0,0)));
+        lights.push_back(LightSource(Point(0, -900, 400), Color(1, 0,1)));
+        lights.push_back(LightSource(Point(0, 200, 800), Color(1, 0,1)));
+
+        scene = Scene(lights, shapes);
+        scene.setEye_pt(Point(0, 0, 1300));
+    }
+    if (image_num == 3){
+        shapes.push_back(new Plane(Point(0, 0, 0), Vec3(0, 1, .05), Color(0, 1, 0), 0));
+
+        shapes.push_back(new Sphere(Point(-150, -115, -200), 80, Color(.5, .5, .5), 0, .4, .7, .2, 5));
+        shapes.push_back(new Sphere(Point(50, -115, -200), 80, Color(.7, .2,.2), .4, .4, .7, .2, 5));
+//        shapes.push_back(new Sphere(Point(0, -135, -350), 50, Color(.4, .7, .8), 0));
+//        shapes.push_back(new Sphere(Point(0, 50, -750), 200, Color(.82, .68, .21), .4, .6, .3, .5, 3));
+//        shapes.push_back(new Sphere(Point(-300, 200, -450), 60, Color(0, .4, 0), 0, .6, .8, .4, 40));
+//
+//        lights.push_back(LightSource(Point(-900, 400, 100), Color(1, 1, 1)));
+        lights.push_back(LightSource(Point(-800, 400, 1000), Color(1, 1, .1)));
+
+//        lights.push_back(LightSource(Point(100, -200, 1000), Color(0, 0, .5)));
+
+        scene = Scene(lights, shapes);
+        scene.setEye_pt(Point(0, 0, 1300));
+    }
+
+
     //if I make a Scene class, that can hold the ambient light coefficient.
 
-    scene.setEye_pt(Point(0, 120, 500));
+
 
     for (int j = 0; j < ImageH; ++j) {
         for (int i = 0; i < ImageW; ++i) {
 
             //works for classic view
-            double y = (j - ImageH /2 + scene.getEye_pt().y);
-            double x = (i - ImageW /2 + scene.getEye_pt().x);
+            double y = (j - ImageH / 2 + scene.getEye_pt().y);
+            double x = (i - ImageW / 2 + scene.getEye_pt().x);
             double z = scene.getEye_pt().z;
             //make it to where camera position is adjustable via V changing
 //            http://stackoverflow.com/questions/13078243/ray-tracing-camera
 
-            Vec3 direction(.2 * x, .2 * y, -z); //these coefficients create a perspective projection.
+            Vec3 direction(scene.getPerspective_x() * x, scene.getPerspective_y() * y, -z); //these coefficients create a perspective projection.
             //to make it orthogonal, use Vec3 direction(0,0,-1);
             //this may cause perspective warp if coefficients are too large. This is expected.
             direction.normalize();
 
-            Ray r(Point(x, y, z), direction);
+//            Ray r(Point(x, y, z), direction);
+            Ray r(scene.getEye_pt(), direction);
             Pixel p = Pixel(Point(0, 0, 0), Color(0, 0, 0));
             if (scene.intersect(r, p))
                 setFramebuffer(i, j, p.color);
+            else setFramebuffer(i, j, 0, 0, 0);
         }
     }
 
     drawit();
 }
 
+void keyboard(unsigned char key, int x, int y) {
+    image_num = (image_num+1) % num_of_images;
+    glutPostRedisplay();
+}
+
 void init(void) {
     clearFramebuffer();
+    image_num = 0;
+    num_of_images = 4;
 }
 
 int main(int argc, char **argv) {
@@ -154,6 +197,7 @@ int main(int argc, char **argv) {
     glutCreateWindow("Wesley Moncrief - A5, Option 2");
     init();
     glutDisplayFunc(display);
+    glutKeyboardFunc(keyboard);
     glutMainLoop();
     return 0;
 }

@@ -16,10 +16,27 @@ class Scene {
     vector<LightSource> lights; // should this be vector of pointers??
     vector<Sphere> spheres;
     Point eye_pt = Point(-200, 0, 00);
-
+    double perspective_x;
+    double perspective_y;
     vector<Shape *> shapes;
 public:
 
+
+    double getPerspective_x() const {
+        return perspective_x;
+    }
+
+    void setPerspective_x(double perspective_x) {
+        Scene::perspective_x = perspective_x;
+    }
+
+    double getPerspective_y() const {
+        return perspective_y;
+    }
+
+    void setPerspective_y(double perspective_y) {
+        Scene::perspective_y = perspective_y;
+    }
 
     void setEye_pt(const Point &eye_pt) {
         Scene::eye_pt = eye_pt;
@@ -34,14 +51,13 @@ public:
     }
 
     Scene(vector<LightSource> _lights, vector<Shape *> _shapes) : lights(_lights), shapes(_shapes) {
-        cout << "here " << endl;
         for (int i = 0; i < shapes.size(); ++i) {
             shapes.at(i)->eye_pt.x = eye_pt.x;
             shapes.at(i)->eye_pt.y = eye_pt.y;
             shapes.at(i)->eye_pt.z = eye_pt.z;
-            cout << "i = " << i << endl;
-
         }
+        perspective_x = 1;
+        perspective_y = 1;
     }
 
     Scene() { }
