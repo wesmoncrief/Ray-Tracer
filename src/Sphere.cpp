@@ -73,12 +73,6 @@ bool Sphere::intersect(const Ray &ray, const vector<LightSource> &lights, vector
     Point intersect_pt;
     if (!get_intersect_pt(ray, intersect_pt)) return false; //else the intersect_pt is updated
 
-
-    if (count > 0) {
-        int k = 4;
-        ++k;
-        ++k;
-    }
     //color is Direct (ambient + diffuse + specular) + reflected + //refracted...
     //if i add attenuation to plane, should I add it here?
     Color ambient = calc_ambient();
@@ -120,7 +114,7 @@ bool Sphere::intersect(const Ray &ray, const vector<LightSource> &lights, vector
     }
 
 
-    Color total_color = direct_color.sum(reflect_pix.color.scaled(.3));
+    Color total_color = direct_color.sum(reflect_pix.color.scaled(reflection_coeff));
 
     pixel = Pixel(intersect_pt, total_color);
 

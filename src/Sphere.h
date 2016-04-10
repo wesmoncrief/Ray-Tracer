@@ -21,6 +21,7 @@ class Sphere : public Shape {
     double radius;
     Color sphere_color;
     //color of object
+    double reflection_coeff;
     double ambient_coeff = .5;
     double diffuse_coeff = .6;
     double specular_refl_coeff = .7;
@@ -33,8 +34,30 @@ public:
 
     //when two solutions, this returns the minimum
 
+    Sphere(const Point &center, double radius, const Color &sphere_color, double reflection_coeff) : center(center),
+                                                                                                     radius(radius),
+                                                                                                     sphere_color(
+                                                                                                             sphere_color),
+                                                                                                     reflection_coeff(
+                                                                                                             reflection_coeff) { }
+
     Sphere(const Point &center, double radius, const Color &sphere_color) : center(center), radius(radius),
-                                                                            sphere_color(sphere_color) { }
+                                                                            sphere_color(sphere_color) {
+        reflection_coeff = .2;
+    }
+
+
+    Sphere(const Point &center, double radius, const Color &sphere_color, double reflection_coeff, double ambient_coeff,
+           double diffuse_coeff, double specular_refl_coeff, double specular_n_value) : center(center), radius(radius),
+                                                                                        sphere_color(sphere_color),
+                                                                                        reflection_coeff(
+                                                                                                reflection_coeff),
+                                                                                        ambient_coeff(ambient_coeff),
+                                                                                        diffuse_coeff(diffuse_coeff),
+                                                                                        specular_refl_coeff(
+                                                                                                specular_refl_coeff),
+                                                                                        specular_n_value(
+                                                                                                specular_n_value) { }
 
 //this returns a boolean and modifies the pixel so that it has color and location information.
     //Pixel information can be used if a ray intersects multiple

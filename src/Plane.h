@@ -22,6 +22,7 @@ class Plane : public Shape {
     Vec3 normal;
     Color plane_color;
     //color of object
+    double reflection_coeff;
     double ambient_coeff = .4;
     double diffuse_coeff = .5;
     double specular_refl_coeff = .7;
@@ -36,6 +37,30 @@ public:
 
     Plane(Point plane_pt, Vec3 plane_norm, Color color) : normal(plane_norm),
                                                           plane_color(color) {
+        normal.normalize();
+        d = (plane_norm.x * plane_pt.x) + (plane_norm.y * plane_pt.y) + (plane_norm.z * plane_pt.z);
+        d = -d;
+        reflection_coeff = 0;
+    }
+
+    Plane(Point plane_pt, Vec3 plane_norm, Color color, double reflection_coeff) : normal(plane_norm),
+                                                          plane_color(color), reflection_coeff(reflection_coeff) {
+        normal.normalize();
+        d = (plane_norm.x * plane_pt.x) + (plane_norm.y * plane_pt.y) + (plane_norm.z * plane_pt.z);
+        d = -d;
+    }
+
+    Plane(Point plane_pt, const Vec3 &plane_norm, const Color &plane_color, double reflection_coeff, double ambient_coeff,
+          double diffuse_coeff, double specular_refl_coeff, double specular_n_value) : normal(plane_norm),
+                                                                                       plane_color(plane_color),
+                                                                                       reflection_coeff(
+                                                                                               reflection_coeff),
+                                                                                       ambient_coeff(ambient_coeff),
+                                                                                       diffuse_coeff(diffuse_coeff),
+                                                                                       specular_refl_coeff(
+                                                                                               specular_refl_coeff),
+                                                                                       specular_n_value(
+                                                                                               specular_n_value) {
         normal.normalize();
         d = (plane_norm.x * plane_pt.x) + (plane_norm.y * plane_pt.y) + (plane_norm.z * plane_pt.z);
         d = -d;

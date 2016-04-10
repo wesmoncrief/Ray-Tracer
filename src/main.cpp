@@ -89,40 +89,33 @@ void display(void) {
 
     vector<Shape *> shapes;
 //    shapes.push_back(new Sphere(Point(80, 0, 0), 50, Color(.1, .7, .2)));
-//    shapes.push_back(new Sphere(Point(50, -90, -200), 50, Color(.2,.2,.2)));
-//    shapes.push_back(new Sphere(Point(-50, -100, -180), 50, Color(.6, .0, .0)));
+//    shapes.push_back(new Sphere(Point(-20, 0, 80), 50, Color(.4, .7, .8)));
+//    shapes.push_back(new Sphere(Point(-150, -100, -80), 50, Color(.9, .2, .4)));
 //    shapes.push_back(new Plane(Point(0,0,0), Vec3(-.5,0,1), Color(1,0,0)));
-    shapes.push_back(new Plane(Point(0,-200,0), Vec3(0,1,.1), Color(0,0,1)));
-    shapes.push_back(new Plane(Point(80,0,-600), Vec3(-1,0,.15), Color(1,1,0)));
+    shapes.push_back(new Plane(Point(0,-200,0), Vec3(0,1,.05), Color(0,1,0), 0));
+    shapes.push_back(new Plane(Point(300,0,-600), Vec3(-1,0,.01), Color(1,.7,0), 0, .45, .5, .3, 30));
 
-    shapes.push_back(new Sphere(Point(-100, 0, 20), 50, Color(.4, .7, .8)));
-    shapes.push_back(new Sphere(Point(100, 0, -200), 100, Color(1, 1, 0)));
-    shapes.push_back(new Sphere(Point(100, -50, 30), 20, Color(.8, .2, .3)));
-    shapes.push_back(new Sphere(Point(0, 200, 0), 70, Color(.8, .2, .9)));
+    shapes.push_back(new Sphere(Point(-150, -115, -200), 80, Color(.5, .5, 1), 0, .4, .7, .2, 5 ));
+    shapes.push_back(new Sphere(Point(0, -135, -350), 50, Color(.4, .7, .8), 0));
+    shapes.push_back(new Sphere(Point(0, 50, -750), 200, Color(.82, .68, .21), .4, .6, .3, .5, 3));
+    shapes.push_back(new Sphere(Point(-300, 200, -450), 60, Color(0, .2, 0), 0, .6, .8, .4, 40));
+//    shapes.push_back(new Sphere(Point(0, 200, 0), 70, Color(.8, .2, .9)));
 
     vector<LightSource> lights;
 
-//    lights.push_back(LightSource(Point(00, 2000, 300), Color(1, 1, 1)));
-//    lights.push_back(LightSource(Point(300,900,-1000), Color(1,0,0)));
+    lights.push_back(LightSource(Point(-900, 400, 100), Color(1, 1, 1)));
+    lights.push_back(LightSource(Point(-100, 400, -2000), Color(.1, 1, .1)));
+//    lights.push_back(LightSource(Point(30,-200,400), Color(0,0,)));
 //    lights.push_back(LightSource(Point(-400, 500, 200), Color(0,0,1)));
-//
-//    lights.push_back(LightSource(Point(0, 900, 00), Color(1, 1, 1)));
-//    lights.push_back(LightSource(Point(-900, 100, 00), Color(0, 1, 1)));
-//    lights.push_back(LightSource(Point(0, 0, 900), Color(1, 0,0)));
-//
-//    shapes.push_back(new Sphere(Point(-100, 0, 20), 50, Color(.4, .7, .8)));
-//    shapes.push_back(new Sphere(Point(100, 0, 0), 100, Color(1, 1, 0)));
-    shapes.push_back(new Sphere(Point(100, -50, 30), 20, Color(.8, .2, .3)));
-    shapes.push_back(new Sphere(Point(0, 200, 0), 70, Color(.8, .2, .9)));
 
 //    lights.push_back(LightSource(Point(0, 900, 00), Color(1, 1, 1)));
-//    lights.push_back(LightSource(Point(-900, 100, 00), Color(0, 1, .5)));
-    lights.push_back(LightSource(Point(0, 0, 900), Color(1, 0, 0)));
+//    lights.push_back(LightSource(Point(-900, 100, 00), Color(0, 1, 1)));
+//    lights.push_back(LightSource(Point(0, 0, 900), Color(1, 0,0)
 
     Scene scene(lights, shapes);
     //if I make a Scene class, that can hold the ambient light coefficient.
 
-    scene.setEye_pt(Point(0, 0, 150));
+    scene.setEye_pt(Point(0, 120, 500));
 
     for (int j = 0; j < ImageH; ++j) {
         for (int i = 0; i < ImageW; ++i) {

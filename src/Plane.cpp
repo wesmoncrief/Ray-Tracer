@@ -71,7 +71,7 @@ bool Plane::intersect(const Ray &ray, const vector<LightSource> &lights, vector<
     }
 
 
-    Color total_color = direct_color.sum(reflect_pix.color);
+    Color total_color = direct_color.sum(reflect_pix.color.scaled(reflection_coeff));
 
     pixel = Pixel(intersect_pt, total_color);
 
