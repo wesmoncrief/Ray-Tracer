@@ -33,12 +33,11 @@ public:
     }
 
     //this does NOT modify the original color!!
-    Color scaled(double coeff){
+    Color scaled(double coeff) {
         return Color((float) (coeff * r), (float) (coeff * g), (float) (coeff * b));
     }
 
 };
-
 
 
 #endif //RAYTRACING_COLOR_H

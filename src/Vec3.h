@@ -6,6 +6,7 @@
 #define RAYTRACING_VEC3_H
 
 #include <math.h>
+
 class Vec3 {
 public:
     double x;
@@ -24,7 +25,7 @@ public:
         z = pt.z;
     }
 
-    double dotProduct(Vec3 v) {
+    double dotProduct(Vec3 v) const {
         return (x * v.x + y * v.y + z * v.z);
     }
 
@@ -35,8 +36,8 @@ public:
         z = z / magnitude;
     }
 
-    Vec3 scaled(double scale){
-        return Vec3(x*scale, y*scale, z*scale);
+    Vec3 scaled(double scale) {
+        return Vec3(x * scale, y * scale, z * scale);
     }
 };
 

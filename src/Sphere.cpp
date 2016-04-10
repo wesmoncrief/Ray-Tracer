@@ -5,7 +5,6 @@
 #include <cmath>
 #include <vector>
 #include "Sphere.h"
-#include "LightSource.h"
 
 //when two solutions, this returns the minimum
 bool quadratic(double a, double b, double c, double &t) {
@@ -67,15 +66,16 @@ bool Sphere::get_intersect_pt(Ray ray, Point &pt) {
     return true;
 }
 
-bool Sphere::intersect(Ray ray, vector<LightSource> lights, vector<Shape *> shapes, int count, Pixel &pixel) {
+bool Sphere::intersect(const Ray &ray, const vector<LightSource> &lights, vector<Shape *> shapes, int count,
+                       Pixel &pixel) {
 
 
     Point intersect_pt;
     if (!get_intersect_pt(ray, intersect_pt)) return false; //else the intersect_pt is updated
 
 
-    if (count > 0){
-        int k=4;
+    if (count > 0) {
+        int k = 4;
         ++k;
         ++k;
     }
@@ -91,7 +91,7 @@ bool Sphere::intersect(Ray ray, vector<LightSource> lights, vector<Shape *> shap
     Vec3 N = Vec3(intersect_pt.x - center.x, intersect_pt.y - center.y, intersect_pt.z - center.z);
     N.normalize();
     Vec3 incoming_ray = Vec3(ray.start.x - intersect_pt.x, ray.start.y - intersect_pt.y,
-                  ray.start.z - intersect_pt.z);
+                             ray.start.z - intersect_pt.z);
     Vec3 E(eye_pt.x - intersect_pt.x, eye_pt.y - intersect_pt.y, eye_pt.z - intersect_pt.z);
     E.normalize();
     double n_coef = 2 * incoming_ray.dotProduct(N);
@@ -101,14 +101,15 @@ bool Sphere::intersect(Ray ray, vector<LightSource> lights, vector<Shape *> shap
     Ray reflected_ray = Ray(intersect_pt, R);
 
     double dist_scale = 0.1;
-    reflected_ray.start = Point(reflected_ray.start.x + dist_scale*reflected_ray.V.x, reflected_ray.start.y + dist_scale*reflected_ray.V.y,
-                             reflected_ray.start.z + dist_scale*reflected_ray.V.z);
+    reflected_ray.start = Point(reflected_ray.start.x + dist_scale * reflected_ray.V.x,
+                                reflected_ray.start.y + dist_scale * reflected_ray.V.y,
+                                reflected_ray.start.z + dist_scale * reflected_ray.V.z);
     reflected_ray.normalize();
 
 
-    Pixel reflect_pix = Pixel(Point(0,0,0), Color(0,0,0));
+    Pixel reflect_pix = Pixel(Point(0, 0, 0), Color(0, 0, 0));
     ++count;
-    if (count < 2){
+    if (count < 2) {
 
 
         for (int i = 0; i < shapes.size(); ++i) {
@@ -126,7 +127,7 @@ bool Sphere::intersect(Ray ray, vector<LightSource> lights, vector<Shape *> shap
     return true;
 }
 
-Color Sphere::calc_diffuse(Point intersect_pt, vector<LightSource> lights, vector<Shape *> shapes) {
+Color Sphere::calc_diffuse(const Point &intersect_pt, const vector<LightSource> &lights, vector<Shape *> shapes) {
 
     Color total_diffuse = Color(0, 0, 0);
 
@@ -160,7 +161,7 @@ Color Sphere::calc_diffuse(Point intersect_pt, vector<LightSource> lights, vecto
     return total_diffuse;
 }
 
-Color Sphere::calc_specular(Point intersect_pt, vector<LightSource> lights, vector<Shape*> shapes) {
+Color Sphere::calc_specular(const Point &intersect_pt, const vector<LightSource> &lights, vector<Shape *> shapes) {
     //i'm assuming all the vectors described are normalized
     //I = C * spec_refl_coeff * (R dot E) ^spec_n_value
 
@@ -204,7 +205,7 @@ Color Sphere::calc_ambient() {
     return Color(sphere_color.scaled(ambient_coeff));
 }
 
-bool Sphere::is_occluded(Ray shadow_ray, vector<Shape *> shapes, LightSource light) {
+bool Sphere::is_occluded(Ray shadow_ray, vector<Shape *> shapes, const LightSource &light) {
 
     //need to move the ray slightly off the shape's surface to avoid self-intersecting
     shadow_ray.start = Point(shadow_ray.start.x + shadow_ray.V.x, shadow_ray.start.y + shadow_ray.V.y,
@@ -221,7 +222,7 @@ bool Sphere::is_occluded(Ray shadow_ray, vector<Shape *> shapes, LightSource lig
 
 }
 
-bool Sphere::is_occluding(Ray shadow_ray, LightSource light){
+bool Sphere::is_occluding(const Ray &shadow_ray, const LightSource &light) const {
 
     //following code from intersect
     double distance = light.light_center.distance(shadow_ray.start);  //distance between lightsource and ray

@@ -25,7 +25,7 @@ class Sphere : public Shape {
     double diffuse_coeff = .6;
     double specular_refl_coeff = .7;
     double specular_n_value = 50; //this is the exponent
-    bool get_intersect_pt(Ray ray, Point& pt);
+    bool get_intersect_pt(Ray ray, Point &pt);
 
 public:
 
@@ -33,24 +33,24 @@ public:
 
     //when two solutions, this returns the minimum
 
-    Sphere(Point center, double radius, const Color &color)
-            : center(center), radius(radius), sphere_color(color) { }
+    Sphere(const Point &center, double radius, const Color &sphere_color) : center(center), radius(radius),
+                                                                            sphere_color(sphere_color) { }
 
-    //this returns a boolean and modifies the pixel so that it has color and location information.
+//this returns a boolean and modifies the pixel so that it has color and location information.
     //Pixel information can be used if a ray intersects multiple
     //objects. it will help determine which one to draw.
     //boolean is useful for when there is no intersection.
-    bool intersect(Ray ray, vector<LightSource> lights, vector<Shape*> shapes, int count, Pixel& pixel);
+    bool intersect(const Ray &ray, const vector<LightSource> &lights, vector<Shape *> shapes, int count, Pixel &pixel);
 
     Color calc_ambient();
 
-    bool is_occluding(Ray shadow_ray, LightSource light);
+    bool is_occluding(const Ray &shadow_ray, const LightSource &light) const;
 
-    bool is_occluded(Ray shadow_ray, vector<Shape *> shapes, LightSource light);
+    bool is_occluded(Ray shadow_ray, vector<Shape *> shapes, const LightSource &light);
 
-    Color calc_diffuse(Point intersect_pt, vector<LightSource> lights, vector<Shape *> shapes);
+    Color calc_diffuse(const Point &intersect_pt, const vector<LightSource> &lights, vector<Shape *> shapes);
 
-    Color calc_specular(Point intersect_pt, vector<LightSource> lights, vector<Shape *> shapes);
+    Color calc_specular(const Point &intersect_pt, const vector<LightSource> &lights, vector<Shape *> shapes);
 };
 
 

@@ -53,17 +53,17 @@ public:
     //Pixel information can be used if a ray intersects multiple
     //objects. it will help determine which one to draw.
     //boolean is useful for when there is no intersection.
-    bool intersect(Ray ray, vector<LightSource> lights, vector<Shape *> shapes, int count, Pixel &pixel);
+    bool intersect(const Ray &ray, const vector<LightSource> &lights, vector<Shape *> shapes, int count, Pixel &pixel);
 
     Color calc_ambient();
 
-    bool is_occluding(Ray shadow_ray, LightSource light);
+    bool is_occluding(const Ray &shadow_ray, const LightSource &light) const;
 
-    bool is_occluded(Ray shadow_ray, vector<Shape *> shapes, LightSource light);
+    bool is_occluded(Ray shadow_ray, vector<Shape *> shapes, const LightSource &light);
 
-    Color calc_diffuse(Point intersect_pt, vector<LightSource> lights, vector<Shape *> shapes);
+    Color calc_diffuse(Point intersect_pt, const vector<LightSource> &lights, vector<Shape *> shapes);
 
-    Color calc_specular(Point intersect_pt, vector<LightSource> lights, vector<Shape *> shapes);
+    Color calc_specular(Point intersect_pt, const vector<LightSource> &lights, vector<Shape *> shapes);
 };
 
 

@@ -10,23 +10,24 @@ bool Plane::get_intersect_pt(Ray ray, Point &pt) {
 
     //t = -(ray.point dot normal + d) / (ray.vec dot N)
     double PoDotN = Vec3(ray.start).dotProduct(normal);
-    double numerator = -1 *(PoDotN + d);
+    double numerator = -1 * (PoDotN + d);
     double denom = ray.V.dotProduct(normal);
     double t = numerator / denom;
-    if (t <0 ) return false; // no intersection. https://www.cl.cam.ac.uk/teaching/1999/AGraphHCI/SMAG/node2.html
+    if (t < 0) return false; // no intersection. https://www.cl.cam.ac.uk/teaching/1999/AGraphHCI/SMAG/node2.html
     Vec3 dist = ray.V.scaled(t);
     pt = Point(ray.start.x + dist.x, ray.start.y + dist.y, ray.start.z + dist.z);
 
     return true;
 }
 
-bool Plane::intersect(Ray ray, vector<LightSource> lights, vector<Shape *> shapes,int count, Pixel &pixel) {
+bool Plane::intersect(const Ray &ray, const vector<LightSource> &lights, vector<Shape *> shapes, int count,
+                      Pixel &pixel) {
     Point intersect_pt;
     if (!get_intersect_pt(ray, intersect_pt)) return false; //else the intersect_pt is updated
 
 
     if (count > 0) {
-        int k =1;
+        int k = 1;
         ++k;
         ++k;
     }
@@ -52,14 +53,15 @@ bool Plane::intersect(Ray ray, vector<LightSource> lights, vector<Shape *> shape
     Ray reflected_ray = Ray(intersect_pt, R);
 
     double dist_scale = 0.1;
-    reflected_ray.start = Point(reflected_ray.start.x + dist_scale*reflected_ray.V.x, reflected_ray.start.y + dist_scale*reflected_ray.V.y,
-                                reflected_ray.start.z + dist_scale*reflected_ray.V.z);
+    reflected_ray.start = Point(reflected_ray.start.x + dist_scale * reflected_ray.V.x,
+                                reflected_ray.start.y + dist_scale * reflected_ray.V.y,
+                                reflected_ray.start.z + dist_scale * reflected_ray.V.z);
     reflected_ray.normalize();
 
 
-    Pixel reflect_pix = Pixel(Point(0,0,0), Color(0,0,0));
+    Pixel reflect_pix = Pixel(Point(0, 0, 0), Color(0, 0, 0));
     ++count;
-    if (count < 2){
+    if (count < 2) {
 
         for (int i = 0; i < shapes.size(); ++i) {
             shapes.at(i)->intersect(reflected_ray, lights, shapes, count, reflect_pix);
@@ -80,14 +82,14 @@ Color Plane::calc_ambient() {
     return Color(plane_color.scaled(ambient_coeff));
 }
 
-bool Plane::is_occluded(Ray shadow_ray, vector<Shape *> shapes, LightSource light) {
+bool Plane::is_occluded(Ray shadow_ray, vector<Shape *> shapes, const LightSource &light) {
     //need to move the ray slightly off the shape's surface to avoid self-intersecting
     shadow_ray.start = Point(shadow_ray.start.x + shadow_ray.V.x, shadow_ray.start.y + shadow_ray.V.y,
                              shadow_ray.start.z + shadow_ray.V.z);
     shadow_ray.normalize();
 
     for (int i = 0; i < shapes.size(); ++i) {
-        Shape* occluding_shape = shapes.at(i);
+        Shape *occluding_shape = shapes.at(i);
         if (occluding_shape->is_occluding(shadow_ray, light))//if our shape gets occluded by occluding_shape
             return true;
 
@@ -97,16 +99,16 @@ bool Plane::is_occluded(Ray shadow_ray, vector<Shape *> shapes, LightSource ligh
     return false;
 }
 
-bool Plane::is_occluding(Ray shadow_ray, LightSource light) {
+bool Plane::is_occluding(const Ray &shadow_ray, const LightSource &light) const {
 
     double distance = light.light_center.distance(shadow_ray.start);
 
     //t = -(ray.point dot normal + d) / (ray.vec dot N)
     double PoDotN = Vec3(shadow_ray.start).dotProduct(normal);
-    double numerator = -1 *(PoDotN + d);
+    double numerator = -1 * (PoDotN + d);
     double denom = shadow_ray.V.dotProduct(normal);
     double t = numerator / denom;
-    if (t <0 ) return false; // no intersection. https://www.cl.cam.ac.uk/teaching/1999/AGraphHCI/SMAG/node2.html
+    if (t < 0) return false; // no intersection. https://www.cl.cam.ac.uk/teaching/1999/AGraphHCI/SMAG/node2.html
 
     if (t < distance)
         return true;
@@ -115,7 +117,7 @@ bool Plane::is_occluding(Ray shadow_ray, LightSource light) {
 
 }
 
-Color Plane::calc_diffuse(Point intersect_pt, vector<LightSource> lights, vector<Shape *> shapes) {
+Color Plane::calc_diffuse(Point intersect_pt, const vector<LightSource> &lights, vector<Shape *> shapes) {
     Color total_diffuse = Color(0, 0, 0);
 
     //run this for each light source. Light sources are additive in their effects.
@@ -144,7 +146,7 @@ Color Plane::calc_diffuse(Point intersect_pt, vector<LightSource> lights, vector
     return total_diffuse;
 }
 
-Color Plane::calc_specular(Point intersect_pt, vector<LightSource> lights, vector<Shape *> shapes) {
+Color Plane::calc_specular(Point intersect_pt, const vector<LightSource> &lights, vector<Shape *> shapes) {
     //i'm assuming all the vectors described are normalized
     //I = C * spec_refl_coeff * (R dot E) ^spec_n_value
 

@@ -15,9 +15,9 @@ using namespace std;
 class Scene {
     vector<LightSource> lights; // should this be vector of pointers??
     vector<Sphere> spheres;
-    Point eye_pt = Point(-200,0,00);
+    Point eye_pt = Point(-200, 0, 00);
 
-    vector<Shape*> shapes;
+    vector<Shape *> shapes;
 public:
 
 
@@ -33,7 +33,7 @@ public:
         return eye_pt;
     }
 
-    Scene(vector<LightSource> _lights, vector<Shape*> _shapes) : lights(_lights), shapes(_shapes) {
+    Scene(vector<LightSource> _lights, vector<Shape *> _shapes) : lights(_lights), shapes(_shapes) {
         cout << "here " << endl;
         for (int i = 0; i < shapes.size(); ++i) {
             shapes.at(i)->eye_pt.x = eye_pt.x;
@@ -46,7 +46,7 @@ public:
 
     Scene() { }
 
-    bool intersect(Ray ray, Pixel &pixel);
+    bool intersect(const Ray &ray, Pixel &pixel);
 };
 
 

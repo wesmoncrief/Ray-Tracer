@@ -1,13 +1,7 @@
 #include <iostream>
 #include <GLUT/glut.h>
-#include <fstream>
-#include <stdlib.h>
-#include <cmath>
-#include <math.h>
 #include "Sphere.h"
-#include "Color.h"
 #include "Scene.h"
-#include "Shape.h"
 #include "Plane.h"
 
 /******************************************************************
@@ -31,8 +25,8 @@
 		setFramebuffer commands alone, though.
   *****************************************************************/
 
-#define ImageW 400
-#define ImageH 400
+#define ImageW 600
+#define ImageH 600
 
 float framebuffer[ImageH][ImageW][3];
 
@@ -95,26 +89,35 @@ void display(void) {
 
     vector<Shape *> shapes;
 //    shapes.push_back(new Sphere(Point(80, 0, 0), 50, Color(.1, .7, .2)));
-    shapes.push_back(new Sphere(Point(-40, -90, 80), 50, Color(.2,.2,.2)));
-    shapes.push_back(new Sphere(Point(-150, -100, 80), 50, Color(.6, .0, .0)));
+//    shapes.push_back(new Sphere(Point(50, -90, -200), 50, Color(.2,.2,.2)));
+//    shapes.push_back(new Sphere(Point(-50, -100, -180), 50, Color(.6, .0, .0)));
 //    shapes.push_back(new Plane(Point(0,0,0), Vec3(-.5,0,1), Color(1,0,0)));
     shapes.push_back(new Plane(Point(0,-200,0), Vec3(0,1,.1), Color(0,0,1)));
-//    shapes.push_back(new Plane(Point(80,0,-600), Vec3(-1,0,.15), Color(1,1,0)));
+    shapes.push_back(new Plane(Point(80,0,-600), Vec3(-1,0,.15), Color(1,1,0)));
 
-//    shapes.push_back(new Sphere(Point(-100, 0, 20), 50, Color(.4, .7, .8)));
-//    shapes.push_back(new Sphere(Point(100, 0, -200), 100, Color(1, 1, 0)));
-//    shapes.push_back(new Sphere(Point(100, -50, 30), 20, Color(.8, .2, .3)));
-//    shapes.push_back(new Sphere(Point(0, 200, 0), 70, Color(.8, .2, .9)));
+    shapes.push_back(new Sphere(Point(-100, 0, 20), 50, Color(.4, .7, .8)));
+    shapes.push_back(new Sphere(Point(100, 0, -200), 100, Color(1, 1, 0)));
+    shapes.push_back(new Sphere(Point(100, -50, 30), 20, Color(.8, .2, .3)));
+    shapes.push_back(new Sphere(Point(0, 200, 0), 70, Color(.8, .2, .9)));
 
     vector<LightSource> lights;
 
-    lights.push_back(LightSource(Point(-100, 200, 300), Color(1, 1, 1)));
+//    lights.push_back(LightSource(Point(00, 2000, 300), Color(1, 1, 1)));
 //    lights.push_back(LightSource(Point(300,900,-1000), Color(1,0,0)));
 //    lights.push_back(LightSource(Point(-400, 500, 200), Color(0,0,1)));
-
+//
 //    lights.push_back(LightSource(Point(0, 900, 00), Color(1, 1, 1)));
 //    lights.push_back(LightSource(Point(-900, 100, 00), Color(0, 1, 1)));
 //    lights.push_back(LightSource(Point(0, 0, 900), Color(1, 0,0)));
+//
+//    shapes.push_back(new Sphere(Point(-100, 0, 20), 50, Color(.4, .7, .8)));
+//    shapes.push_back(new Sphere(Point(100, 0, 0), 100, Color(1, 1, 0)));
+    shapes.push_back(new Sphere(Point(100, -50, 30), 20, Color(.8, .2, .3)));
+    shapes.push_back(new Sphere(Point(0, 200, 0), 70, Color(.8, .2, .9)));
+
+//    lights.push_back(LightSource(Point(0, 900, 00), Color(1, 1, 1)));
+//    lights.push_back(LightSource(Point(-900, 100, 00), Color(0, 1, .5)));
+    lights.push_back(LightSource(Point(0, 0, 900), Color(1, 0, 0)));
 
     Scene scene(lights, shapes);
     //if I make a Scene class, that can hold the ambient light coefficient.
@@ -125,8 +128,8 @@ void display(void) {
         for (int i = 0; i < ImageW; ++i) {
 
             //works for classic view
-            double y = (j - 200 + scene.getEye_pt().y);
-            double x = (i - 200 + scene.getEye_pt().x);
+            double y = (j - ImageH /2 + scene.getEye_pt().y);
+            double x = (i - ImageW /2 + scene.getEye_pt().x);
             double z = scene.getEye_pt().z;
             //make it to where camera position is adjustable via V changing
 //            http://stackoverflow.com/questions/13078243/ray-tracing-camera
@@ -137,7 +140,7 @@ void display(void) {
             direction.normalize();
 
             Ray r(Point(x, y, z), direction);
-            Pixel p = Pixel(Point(0,0,0), Color(0,0,0));
+            Pixel p = Pixel(Point(0, 0, 0), Color(0, 0, 0));
             if (scene.intersect(r, p))
                 setFramebuffer(i, j, p.color);
         }
