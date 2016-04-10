@@ -95,11 +95,11 @@ void display(void) {
 
     vector<Shape *> shapes;
 //    shapes.push_back(new Sphere(Point(80, 0, 0), 50, Color(.1, .7, .2)));
-//    shapes.push_back(new Sphere(Point(-20, 0, 80), 50, Color(.4, .7, .8)));
-    shapes.push_back(new Sphere(Point(-150, -100, -80), 50, Color(.9, .2, .4)));
+    shapes.push_back(new Sphere(Point(-40, -90, 80), 50, Color(.2,.2,.2)));
+    shapes.push_back(new Sphere(Point(-150, -100, 80), 50, Color(.6, .0, .0)));
 //    shapes.push_back(new Plane(Point(0,0,0), Vec3(-.5,0,1), Color(1,0,0)));
-    shapes.push_back(new Plane(Point(0,-200,0), Vec3(0,1,.1), Color(0,1,0)));
-    shapes.push_back(new Plane(Point(80,0,-600), Vec3(-1,0,.15), Color(1,1,0)));
+    shapes.push_back(new Plane(Point(0,-200,0), Vec3(0,1,.1), Color(0,0,1)));
+//    shapes.push_back(new Plane(Point(80,0,-600), Vec3(-1,0,.15), Color(1,1,0)));
 
 //    shapes.push_back(new Sphere(Point(-100, 0, 20), 50, Color(.4, .7, .8)));
 //    shapes.push_back(new Sphere(Point(100, 0, -200), 100, Color(1, 1, 0)));
@@ -108,7 +108,7 @@ void display(void) {
 
     vector<LightSource> lights;
 
-    lights.push_back(LightSource(Point(-900, 400, 100), Color(1, 1, 1)));
+    lights.push_back(LightSource(Point(-100, 200, 300), Color(1, 1, 1)));
 //    lights.push_back(LightSource(Point(300,900,-1000), Color(1,0,0)));
 //    lights.push_back(LightSource(Point(-400, 500, 200), Color(0,0,1)));
 
@@ -137,7 +137,7 @@ void display(void) {
             direction.normalize();
 
             Ray r(Point(x, y, z), direction);
-            Pixel p = Pixel();
+            Pixel p = Pixel(Point(0,0,0), Color(0,0,0));
             if (scene.intersect(r, p))
                 setFramebuffer(i, j, p.color);
         }

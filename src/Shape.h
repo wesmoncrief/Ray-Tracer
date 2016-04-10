@@ -17,8 +17,9 @@ public:
     double specular_refl_coeff ;
     double specular_n_value;
 
+    int count_max = 3;
 
-    virtual bool intersect(Ray ray, vector<LightSource> lights, vector<Shape*> shapes, Pixel& pixel) = 0;
+    virtual bool intersect(Ray ray, vector<LightSource> lights, vector<Shape*> shapes, int count, Pixel& pixel) = 0;
 
     virtual bool is_occluding(Ray shadow_ray, LightSource light) = 0;
 

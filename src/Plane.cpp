@@ -20,9 +20,16 @@ bool Plane::get_intersect_pt(Ray ray, Point &pt) {
     return true;
 }
 
-bool Plane::intersect(Ray ray, vector<LightSource> lights, vector<Shape *> shapes, Pixel &pixel) {
+bool Plane::intersect(Ray ray, vector<LightSource> lights, vector<Shape *> shapes,int count, Pixel &pixel) {
     Point intersect_pt;
     if (!get_intersect_pt(ray, intersect_pt)) return false; //else the intersect_pt is updated
+
+
+    if (count > 0) {
+        int k =1;
+        ++k;
+        ++k;
+    }
 
     //color is Direct (ambient + diffuse + specular) + reflected + //refracted...
     //if i add attenuation to plane, should I add it here?
@@ -31,8 +38,41 @@ bool Plane::intersect(Ray ray, vector<LightSource> lights, vector<Shape *> shape
     Color direct_color = ambient.sum(diffuse);
     Color specular = calc_specular(intersect_pt, lights, shapes);
     direct_color = direct_color.sum(specular);
-//    pixel = Pixel(intersect_pt, direct_color);
-    pixel = Pixel(intersect_pt, direct_color);
+
+    //reflected part! //from specular?
+
+    Vec3 incoming_ray = Vec3(ray.start.x - intersect_pt.x, ray.start.y - intersect_pt.y,
+                             ray.start.z - intersect_pt.z);
+    Vec3 E(eye_pt.x - intersect_pt.x, eye_pt.y - intersect_pt.y, eye_pt.z - intersect_pt.z);
+    E.normalize();
+    double n_coef = 2 * incoming_ray.dotProduct(normal);
+    Vec3 R(n_coef * normal.x - incoming_ray.x, n_coef * normal.y - incoming_ray.y, n_coef * normal.z - incoming_ray.z);
+    R.normalize(); //not sure if this is necessary or not
+
+    Ray reflected_ray = Ray(intersect_pt, R);
+
+    double dist_scale = 0.1;
+    reflected_ray.start = Point(reflected_ray.start.x + dist_scale*reflected_ray.V.x, reflected_ray.start.y + dist_scale*reflected_ray.V.y,
+                                reflected_ray.start.z + dist_scale*reflected_ray.V.z);
+    reflected_ray.normalize();
+
+
+    Pixel reflect_pix = Pixel(Point(0,0,0), Color(0,0,0));
+    ++count;
+    if (count < 2){
+
+        for (int i = 0; i < shapes.size(); ++i) {
+            shapes.at(i)->intersect(reflected_ray, lights, shapes, count, reflect_pix);
+        }
+        //need to try intersecting with EVERY shape! :)
+
+    }
+
+
+    Color total_color = direct_color.sum(reflect_pix.color);
+
+    pixel = Pixel(intersect_pt, total_color);
+
     return true;
 }
 

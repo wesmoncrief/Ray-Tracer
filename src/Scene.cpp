@@ -13,7 +13,7 @@ bool Scene::intersect(Ray ray, Pixel &pixel) { //don't modify 'pixel' until the 
     vector<Pixel> closest_pixs;
     for (int i = 0; i < shapes.size(); ++i) {
         Pixel temp_pix = pixel;
-        if (shapes.at(i)->intersect(ray, lights, shapes, temp_pix)){ //add all the intersections from
+        if (shapes.at(i)->intersect(ray, lights, shapes, 0, temp_pix)){ //add all the intersections from
             //the different shapes to the closest_pix vector
             closest_pixs.push_back(temp_pix);
         }
