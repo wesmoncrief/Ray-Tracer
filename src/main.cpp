@@ -25,8 +25,8 @@
 		setFramebuffer commands alone, though.
   *****************************************************************/
 
-#define ImageW 600
-#define ImageH 600
+#define ImageW 800
+#define ImageH 800
 
 float framebuffer[ImageH][ImageW][3];
 int image_num; //used to cycle between images!
@@ -117,7 +117,7 @@ void display(void) {
         scene.setEye_pt(Point(0, 0, 1300));
     }
     if (image_num == 2){
-        shapes.push_back(new Sphere(Point(0, 100, 0), 250, Color(.3, .8, .3)));
+        shapes.push_back(new Sphere(Point(0, 0, 0), 250, Color(.3, .8, .3)));
 
         lights.push_back(LightSource(Point(0, 900, 400), Color(0, 1, 0)));
         lights.push_back(LightSource(Point(-900, 0, 400), Color(0, 0, 1)));
@@ -126,19 +126,21 @@ void display(void) {
         lights.push_back(LightSource(Point(0, 200, 800), Color(1, 0,1)));
 
         scene = Scene(lights, shapes);
-        scene.setEye_pt(Point(0, 0, 1300));
+        scene.setEye_pt(Point(0, 0, 1600));
     }
     if (image_num == 3){
-        shapes.push_back(new Plane(Point(0, 0, 0), Vec3(0, 1, .05), Color(0, 1, 0), 0));
+        shapes.push_back(new Plane(Point(0, -50, 0), Vec3(.7, 1, 0), Color(.2, .8, .7), 0));
+        shapes.push_back(new Plane(Point(0, -50, 0), Vec3(-.7,1,0), Color(.5, .5, .5), .7));
 
-        shapes.push_back(new Sphere(Point(-150, -115, -200), 80, Color(.5, .5, .5), 0, .4, .7, .2, 5));
-        shapes.push_back(new Sphere(Point(50, -115, -200), 80, Color(.7, .2,.2), .4, .4, .7, .2, 5));
+        shapes.push_back(new Sphere(Point(0, 35, 0), 80, Color(1, .1, 0), 0, .4, .7, .2, 45));
+        shapes.push_back(new Sphere(Point(0, 5, 180), 50, Color(.2, .1, .8), 0, .4, .7, .8, 5));
+        shapes.push_back(new Sphere(Point(50, 115, 350), 40, Color(0,1,.1), .4, .4, .7, .2, 5));
 //        shapes.push_back(new Sphere(Point(0, -135, -350), 50, Color(.4, .7, .8), 0));
 //        shapes.push_back(new Sphere(Point(0, 50, -750), 200, Color(.82, .68, .21), .4, .6, .3, .5, 3));
 //        shapes.push_back(new Sphere(Point(-300, 200, -450), 60, Color(0, .4, 0), 0, .6, .8, .4, 40));
 //
 //        lights.push_back(LightSource(Point(-900, 400, 100), Color(1, 1, 1)));
-        lights.push_back(LightSource(Point(-800, 400, 1000), Color(1, 1, .1)));
+        lights.push_back(LightSource(Point(200, 400, 1500), Color(1, 1, 1)));
 
 //        lights.push_back(LightSource(Point(100, -200, 1000), Color(0, 0, .5)));
 
