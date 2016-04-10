@@ -14,7 +14,6 @@ using namespace std;
 
 class Scene {
     vector<LightSource> lights; // should this be vector of pointers??
-    vector<Sphere> spheres;
     Point eye_pt = Point(-200, 0, 00);
     double perspective_x;
     double perspective_y;

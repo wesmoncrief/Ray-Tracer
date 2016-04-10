@@ -12,7 +12,7 @@
 class Pixel {
 public:
 
-    Pixel() { }
+    Pixel() { color = Color(); }
 
     Pixel(const Point &point, const Color &color) : point(point), color(color) { }
 
