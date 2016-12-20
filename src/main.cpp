@@ -1,5 +1,6 @@
 #include <iostream>
-#include <GLUT/glut.h>
+#include <GL/glut.h>
+//#include <GLUT/glut.h>
 #include "Sphere.h"
 #include "Scene.h"
 #include "Plane.h"

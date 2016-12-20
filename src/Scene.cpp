@@ -3,7 +3,7 @@
 //
 
 #include "Scene.h"
-
+#include <algorithm>
 bool cmp_pts(Pixel p1, Pixel p2) {
     return p1.point.z > p2.point.z;
 }
